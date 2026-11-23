@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+<html lang="kk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>TourCheck KZ - Туристік шартты тексеру</title>
+<meta content="Туристік шартқа қол қояр алдында нені тексеру керек? Оқу мақсатындағы ақпараттық веб-жоба." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{--wine:#681D32;--deep:#431421;--beige:#F6F1EA;--white:#fff;--gold:#C6A36B;--ink:#26232A;
+--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+--shadow:0 10px 30px rgba(67,20,33,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);color:var(--ink);background:var(--beige);line-height:1.65;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:var(--wine)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+section{padding:88px 0}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;color:var(--deep)}
+h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin-bottom:14px}
+.lead{max-width:62ch;margin-bottom:36px;opacity:.85}
+
+/* Attribution */
+.ai-credit{font-size:.78rem;opacity:.72;text-align:center;margin-top:28px;letter-spacing:.01em}
+.hero .ai-credit{color:#fff;opacity:.8}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:rgba(246,241,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(104,29,50,.12)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:var(--serif);font-weight:700;font-size:1.4rem;color:var(--wine);text-decoration:none}
+.logo span{color:var(--gold)}
+nav ul{display:flex;gap:6px;list-style:none}
+nav a{display:block;padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--deep);font-weight:500;font-size:.95rem;transition:.2s}
+nav a:hover,nav a.active{background:var(--wine);color:#fff}
+.burger{display:none;background:none;border:1px solid var(--wine);color:var(--wine);width:44px;height:44px;border-radius:12px;font-size:1.3rem;cursor:pointer}
+
+/* Buttons */
+.btn{display:inline-block;border:2px solid var(--wine);background:var(--wine);color:#fff;padding:14px 28px;border-radius:999px;font:600 1rem var(--sans);cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(104,29,50,.3)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--wine)}
+.btn.ghost:hover{background:var(--wine);color:#fff}
+.btn.small{padding:10px 20px;font-size:.9rem}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--deep),var(--wine));color:#fff;padding:90px 0 100px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.hero h1{color:#fff;font-size:clamp(2.1rem,5.5vw,3.8rem);margin-bottom:22px}
+.hero p{font-size:1.1rem;max-width:52ch;opacity:.92;margin-bottom:32px}
+.hero .btns{display:flex;flex-wrap:wrap;gap:14px}
+.hero .btn{background:var(--gold);border-color:var(--gold);color:var(--deep)}
+.hero .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+.hero .btn.ghost:hover{background:#fff;color:var(--wine)}
+.art{width:100%;max-width:420px;margin-inline:auto;animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+
+/* Checklist */
+.checklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.item{position:relative;display:flex;gap:14px;background:#fff;border:2px solid transparent;border-radius:20px;padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:.2s}
+.item:hover{transform:translateY(-3px);border-color:var(--gold)}
+.item.done{border-color:var(--wine);background:#fffafb}
+.item input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.item:focus-within{outline:3px solid var(--gold);outline-offset:3px}
+.box{flex:none;width:28px;height:28px;border:2px solid var(--wine);border-radius:8px;display:grid;place-items:center;color:transparent;font-weight:700;transition:.2s}
+.item.done .box{background:var(--wine);color:#fff}
+.item h3{font-family:var(--sans);font-size:1.02rem;font-weight:600;margin-bottom:4px}
+.item p{font-size:.92rem;opacity:.8}
+.tools{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* Calculators */
+.alt{background:#fff}
+.panel{background:var(--beige);border-radius:28px;padding:36px;box-shadow:var(--shadow)}
+.alt .panel{background:var(--beige)}
+.check-grid{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+.ring{position:relative;width:220px;height:220px;margin-inline:auto}
+.ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.ring circle{fill:none;stroke-width:16}
+.ring .bg{stroke:#e5dccf}
+.ring .fg{stroke:var(--wine);stroke-linecap:round;stroke-dasharray:553;stroke-dashoffset:553;transition:stroke-dashoffset .8s ease}
+.ring .num{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-family:var(--serif);font-size:3rem;color:var(--deep)}
+.ring .num small{font:500 .8rem var(--sans);opacity:.7}
+.stats{display:flex;gap:12px;margin:14px 0;flex-wrap:wrap}
+.stat{background:#fff;border-radius:16px;padding:12px 18px;flex:1;min-width:120px}
+.stat b{display:block;font:700 1.6rem var(--serif);color:var(--wine)}
+.msg{border-left:4px solid var(--gold);background:#fff;padding:14px 18px;border-radius:0 14px 14px 0;font-weight:500;margin:14px 0}
+.note{font-size:.88rem;opacity:.75;margin-top:12px}
+#missing{margin:10px 0 0 20px;font-size:.93rem}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+label{display:block;font-weight:600;font-size:.92rem;margin-bottom:6px}
+input[type=number]{width:100%;padding:13px 14px;border:2px solid #d9cfc0;border-radius:12px;font:1rem var(--sans);background:#fff;color:var(--ink)}
+input[type=number]:focus{border-color:var(--wine);outline:none;box-shadow:0 0 0 3px rgba(198,163,107,.5)}
+input.invalid{border-color:#b3261e}
+.err{color:#b3261e;font-size:.85rem;min-height:1.3em;margin-top:4px}
+.result{margin-top:26px;background:linear-gradient(135deg,var(--deep),var(--wine));color:#fff;border-radius:22px;padding:28px;display:none}
+.result.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:scale(.97)}}
+.result .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.18)}
+.result .total{font:700 clamp(1.8rem,5vw,2.6rem) var(--serif);color:var(--gold);margin-top:14px}
+.formmsg{margin-top:14px;color:#b3261e;font-weight:600}
+
+/* Law */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{background:#fff;border-radius:22px;padding:26px;box-shadow:var(--shadow);border-top:4px solid var(--gold)}
+.card h3{font-size:1.25rem;margin-bottom:10px}
+.card ul{margin-left:18px}
+.card li{margin-bottom:6px}
+.tag{display:inline-block;background:var(--beige);color:var(--wine);border:1px dashed var(--wine);border-radius:8px;padding:2px 8px;font-size:.8rem;font-weight:600}
+.verify{margin-top:24px;padding:18px 22px;border:2px dashed var(--gold);border-radius:18px;background:#fffdf8}
+.mark{margin:0 0 10px}
+
+/* Additional assessment and report */
+.risk-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.risk-option{display:flex;align-items:flex-start;gap:10px;padding:16px;background:#fff;border-radius:14px;cursor:pointer;font-weight:500}
+.risk-option input{accent-color:var(--wine);width:20px;height:20px;flex:none;margin-top:3px}
+.risk-output{margin-top:20px}.risk-output ul{margin-left:22px}.risk-output li{margin-bottom:12px}
+.report-preview{margin-top:22px;white-space:pre-wrap;font-size:.93rem;line-height:1.7}
+@media print{header,nav,.burger,.tools,#top,.hero,.checklist,.faq,#risks,#calc,#law,footer{display:none!important}body{background:#fff}section{padding:10px 0}#report{display:block!important}.report-preview{box-shadow:none;border:1px solid #ddd}#reportTitle{color:#000}}
+/* FAQ */
+.faq{max-width:820px}
+.q{background:#fff;border-radius:18px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.q button{width:100%;text-align:left;background:none;border:0;padding:20px 24px;font:600 1.05rem var(--sans);color:var(--deep);cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.q button::after{content:"+";font-size:1.5rem;color:var(--wine);transition:transform .25s}
+.q button[aria-expanded=true]::after{transform:rotate(45deg)}
+.ans{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.ans p{padding:0 24px 22px}
+
+/* Footer */
+footer{background:var(--deep);color:#eadfd0;padding:48px 0;font-size:.95rem}
+footer a{color:var(--gold)}
+footer p{margin-bottom:10px}
+.warn{border:1px solid rgba(198,163,107,.5);border-radius:14px;padding:14px 18px;margin-top:16px}
+#top{position:fixed;right:20px;bottom:20px;width:48px;height:48px;border-radius:50%;border:0;background:var(--wine);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:40}
+#top.show{opacity:1;pointer-events:auto}
+#top:hover{background:var(--gold);color:var(--deep)}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:860px){
+ .hero-grid,.check-grid{grid-template-columns:1fr}
+ .burger{display:block}
+ nav{position:absolute;top:68px;left:0;right:0;background:var(--beige);border-bottom:1px solid rgba(104,29,50,.15);display:none;padding:10px 20px 16px}
+ nav.open{display:block}
+ nav ul{flex-direction:column}
+ section{padding:64px 0}
+ .panel{padding:22px}
+}
+@media(max-width:360px){.checklist{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation:none!important;transition:none!important}
+ .reveal{opacity:1;transform:none}
+}
+
+/* ADAL-inspired premium visual refresh */
+:root{--wine:#681d32;--deep:#431421;--beige:#f8f5ef;--gold:#bd9859;--ink:#272027;--shadow:0 22px 60px rgba(67,20,33,.10)}
+body{background:var(--beige);transition:background .4s,color .4s}
+h1,h2,h3{letter-spacing:-.025em}h2{font-size:clamp(2.2rem,5vw,3.6rem)}
+header{background:rgba(248,245,239,.85);backdrop-filter:blur(22px)}
+.logo{letter-spacing:-.045em;font-size:1.6rem}
+.hero{position:relative;background:radial-gradient(circle at 80% 20%,rgba(198,163,107,.3),transparent 38%),linear-gradient(135deg,#35101d,#681d32 75%,#7d3646);min-height:75vh;display:flex;align-items:center}
+.hero:before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,transparent 0 75px,rgba(255,255,255,.025) 76px 77px)}
+.hero h1{font-size:clamp(2.8rem,6vw,5.5rem);line-height:1.04;letter-spacing:-.045em}
+.hero .art{filter:drop-shadow(0 30px 40px rgba(0,0,0,.2))}
+.btn{box-shadow:0 10px 28px rgba(67,20,33,.12);transition:transform .3s,box-shadow .3s,background .3s}
+.btn:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(67,20,33,.22)}
+.item,.card,.panel,.q,.stat,.risk-option{border:1px solid rgba(104,29,50,.1);box-shadow:var(--shadow);transition:transform .35s,box-shadow .35s,border-color .35s,background .35s}
+.item:hover,.card:hover,.q:hover,.risk-option:hover{transform:translateY(-5px);box-shadow:0 28px 65px rgba(67,20,33,.16)}
+.card{border-top:3px solid var(--gold);padding:32px}
+.card h3{font-size:1.55rem}.panel{border-radius:28px}
+section{position:relative}.lead{font-size:1.07rem}
+.theme-controls{display:flex;align-items:center;gap:8px;margin-left:12px}
+.theme-btn{border:1px solid rgba(104,29,50,.22);border-radius:999px;background:transparent;color:var(--wine);padding:8px 13px;cursor:pointer;font:600 .85rem Inter,system-ui,sans-serif}
+.theme-btn:hover{background:var(--wine);color:#fff}
+.design-strip{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.design-pill{border:1px solid rgba(255,255,255,.4);padding:8px 14px;border-radius:100px;color:#fff;font-size:.82rem;letter-spacing:.03em}
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--wine),var(--gold));width:0;z-index:100;pointer-events:none}
+:root[data-theme=dark]{--beige:#1b1419;--white:#261e24;--ink:#f3eae7;--deep:#f7e7e6;--wine:#d49aab;--shadow:0 20px 60px rgba(0,0,0,.3)}
+:root[data-theme=dark] body{background:var(--beige);color:var(--ink)}
+:root[data-theme=dark] header{background:rgba(27,20,25,.9)}
+:root[data-theme=dark] nav{background:var(--beige)}
+:root[data-theme=dark] .alt{background:#241b22}
+:root[data-theme=dark] .item,:root[data-theme=dark] .card,:root[data-theme=dark] .q,:root[data-theme=dark] .stat,:root[data-theme=dark] .risk-option,:root[data-theme=dark] .msg,:root[data-theme=dark] .verify{background:#30242d;color:var(--ink)}
+:root[data-theme=dark] .panel{background:#2b2229}
+:root[data-theme=dark] .item.done{background:#402a37}
+:root[data-theme=dark] .result{background:linear-gradient(135deg,#3c1a2c,#652a44)}
+:root[data-theme=dark] .hero{background:radial-gradient(circle at 80% 20%,rgba(198,163,107,.22),transparent 40%),linear-gradient(135deg,#2a0d19,#542036)}
+:root[data-theme=dark] footer{background:#130d12}
+:root[data-theme=dark] input[type=number]{background:#211820;color:#fff;border-color:#6b5260}
+:root[data-theme=dark] .theme-btn{color:#fff;border-color:#765b68}
+:root[data-theme=dark] .theme-btn:hover{background:#694056}
+:root[data-theme=dark] .hero h1,:root[data-theme=dark] footer h2{color:#fff}
+:root[data-theme=dark] .hero .btn{color:#2b1520}
+:root[data-theme=dark] .hero .btn.ghost{color:#fff}
+:root[data-theme=dark] .ring .bg{stroke:#594650}
+:root[data-theme=dark] .tag{background:#382734}
+:root[data-theme=dark] .btn:not(.ghost){color:#25121c}
+:root[data-theme=dark] .btn.ghost{color:var(--wine)}
+:root[data-theme=dark] .btn.ghost:hover{color:#fff}
+@media(max-width:860px){.bar{height:auto;min-height:68px;flex-wrap:wrap}.theme-controls{margin-left:auto}.theme-btn{padding:7px 10px;font-size:.78rem}.hero{min-height:auto}.hero-grid{gap:24px}.hero .art{max-width:310px}nav{top:68px}}
+@media(prefers-reduced-motion:reduce){.item,.card,.q{transition:none}}
+
+
+/* Travel photography */
+.photo-credit{display:block;margin-top:7px;font-size:.75rem;font-weight:400;line-height:1.5;opacity:.85}.photo-credit a{text-decoration:underline}
+.travel-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
+.travel-photo{background:#fff;border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.travel-photo img{width:100%;height:230px;object-fit:cover;display:block}
+.travel-photo figcaption{padding:14px 18px;font-weight:600;color:#431421}
+.author-credit{margin-top:25px;padding-top:20px;border-top:1px solid rgba(198,163,107,.45);line-height:1.9}
+@media(max-width:700px){.travel-gallery{grid-template-columns:1fr}.travel-photo img{height:210px}}
+.lang-switch{display:flex;gap:3px;align-items:center;background:rgba(104,29,50,.07);padding:4px;border-radius:22px;margin-left:auto}.lang-switch button{border:0;border-radius:18px;background:transparent;color:var(--wine);font:700 .76rem var(--sans);padding:8px 10px;cursor:pointer}.lang-switch button[aria-pressed=true]{background:var(--wine);color:#fff}:root[data-theme=dark] .lang-switch button{color:#fff}:root[data-theme=dark] .lang-switch button[aria-pressed=true]{background:#8d4b64}@media(max-width:860px){.lang-switch{order:1;margin-left:auto}.theme-controls{order:2;margin-left:4px}.burger{order:3}.bar{gap:5px}.logo{font-size:1.2rem}.lang-switch button{padding:7px 6px;font-size:.7rem}}
+
+/* Visitor journey and polished typography */
+body{font-family:Inter,Arial,sans-serif;letter-spacing:0;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3{overflow-wrap:break-word;hyphens:none;letter-spacing:-.025em;line-height:1.22}
+p,li,.item,.card{overflow-wrap:break-word}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+section{scroll-margin-top:80px}
+.journey{background:linear-gradient(180deg,#fff 0%,#f8f5ef 100%)}
+.journey-intro{max-width:760px;margin-bottom:32px}
+.journey-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.journey-step{background:#fff;border:1px solid rgba(104,29,50,.12);border-radius:24px;padding:28px;box-shadow:var(--shadow);transition:transform .4s ease,box-shadow .4s ease}
+.journey-step:hover{transform:translateY(-7px);box-shadow:0 25px 55px rgba(67,20,33,.16)}
+.journey-num{display:grid;place-items:center;width:48px;height:48px;background:#681d32;color:#fff;border-radius:50%;font-weight:700;margin-bottom:18px}
+.journey-step h3{font-size:1.35rem;margin-bottom:12px}
+.journey-step p{font-size:.96rem}
+.journey-actions{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+:root[data-theme=dark] .journey{background:#241b22}
+:root[data-theme=dark] .journey-step{background:#30242d;color:#f3eae7}
+:root[data-theme=dark] .journey-step h3{color:#fff}
+@media(max-width:780px){.journey-steps{grid-template-columns:1fr}.journey-step{padding:24px}h1{font-size:clamp(2rem,8vw,3.5rem)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Cinematic editorial redesign */
+:root{--shadow:0 22px 65px rgba(45,18,30,.12)}
+body{font-feature-settings:"kern" 1;letter-spacing:-.012em}
+h1,h2,h3{overflow-wrap:break-word;text-wrap:balance}
+p{max-width:72ch}
+.hero{min-height:85vh;padding:90px 0;background:radial-gradient(ellipse at 0 90%,#9d5060 0%,transparent 46%),linear-gradient(120deg,#250d19,#631c33 75%)}
+.hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,85px)}
+.hero h1{font-size:clamp(2.6rem,5.4vw,5.6rem);line-height:1.08;letter-spacing:-.055em}
+.hero-grid>div:first-child{position:relative;z-index:2}
+.hero-visual{position:relative;min-width:0;transform:rotate(2deg);animation:visualEnter 1.2s cubic-bezier(.2,.8,.2,1) both}
+.hero-visual>img{display:block;width:100%;height:clamp(340px,46vw,570px);object-fit:cover;border-radius:210px 210px 22px 22px;box-shadow:0 40px 75px rgba(0,0,0,.32)}
+.hero-floating{position:absolute;bottom:38px;left:-35px;background:#f8f5ef;color:#431421;padding:17px 22px;border-radius:18px;display:flex;align-items:center;gap:14px;box-shadow:0 20px 45px rgba(0,0,0,.25);font-size:.85rem;line-height:1.35;animation:gentleFloat 5s ease-in-out infinite}
+.float-icon{display:grid;place-items:center;width:46px;height:46px;background:#681d32;color:white;border-radius:14px;font-size:1.5rem}
+.hero-photo-credit{display:block;color:#fff;opacity:.85;text-align:right;margin-top:14px;font-size:.72rem}.hero-photo-credit a{color:#f1d6a7}
+@keyframes visualEnter{from{opacity:0;transform:translate(50px,30px) rotate(5deg)}to{opacity:1;transform:rotate(2deg)}}
+@keyframes gentleFloat{50%{transform:translateY(-12px)}}
+.journey{background:linear-gradient(180deg,#faf7f2,#f0e9e1);overflow:hidden}
+.journey-intro{text-align:center;margin:0 auto 55px}.journey-intro .lead{margin:18px auto 0}
+.journey-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+.journey-step{padding:0 0 30px;border-radius:28px;overflow:hidden;background:#fff;transition:transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .55s}
+.journey-step:hover{transform:translateY(-14px)}
+.step-photo{position:relative;height:245px;overflow:hidden;margin-bottom:25px}
+.step-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.journey-step:hover .step-photo img{transform:scale(1.12)}
+.step-photo:after{content:"";position:absolute;inset:50% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.35));pointer-events:none}
+.step-photo-credit{position:absolute;bottom:12px;right:14px;color:white;font-size:.7rem;z-index:1}
+.journey-step .journey-num{margin:0 26px 18px;background:#681d32}
+.journey-step h3,.journey-step p{margin-left:26px;margin-right:26px}
+.journey-step h3{font-size:clamp(1.2rem,2vw,1.65rem);line-height:1.2}
+.journey-actions{justify-content:center;margin-top:38px}
+.reveal{transform:translateY(40px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{transform:translateY(0)}
+.travel-photo img{transition:transform .8s ease}.travel-photo:hover img{transform:scale(1.06)}
+.travel-photo{isolation:isolate}.travel-photo img{position:relative;z-index:-1}
+.btn{transition:transform .35s,box-shadow .35s,background .35s}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero{padding:80px 0}.hero-visual{width:min(100%,550px);margin:auto}.hero-visual>img{height:390px}.journey-steps{grid-template-columns:1fr;max-width:590px;margin:auto}.step-photo{height:260px}}
+@media(max-width:500px){.hero-visual{transform:none;animation:none}.hero-visual>img{height:300px;border-radius:150px 150px 20px 20px}.hero-floating{left:0;bottom:38px;padding:10px;font-size:.72rem}.hero h1{font-size:clamp(2.3rem,10vw,3.5rem)}.journey-step h3,.journey-step p{margin-left:20px;margin-right:20px}}
+@media(prefers-reduced-motion:reduce){.hero-visual,.hero-floating{animation:none}.reveal,.step-photo img{transition:none}}
+:root[data-theme=dark] .journey{background:#241b22}
+:root[data-theme=dark] .journey-step{background:#30242d}
+
+/* iPhone Files preview compatibility: never hide content behind JS reveal */
+.reveal,.reveal:not(.in){opacity:1!important;transform:none!important;visibility:visible!important}
+/* iPhone Quick Look compatibility: never hide content behind scroll animations */
+.reveal, .reveal.in { opacity:1 !important; transform:none !important; visibility:visible !important; }
+section, .panel, .card, .journey-step { content-visibility:visible !important; }
+</style>
+<style>
+.law-search-panel{background:linear-gradient(135deg,#fff,#f5eae5);border:1px solid rgba(104,29,50,.16);border-radius:26px;padding:clamp(22px,4vw,38px);box-shadow:var(--shadow);margin:28px 0 42px}
+.law-search-panel h3{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:10px}.law-search-panel p{margin-bottom:18px}
+.law-search-form{display:grid;grid-template-columns:minmax(170px,1fr) minmax(170px,1.5fr) auto;gap:12px;align-items:end}
+.law-search-form label{color:#431421}.law-search-form input,.law-search-form select{width:100%;padding:14px 16px;border:1.5px solid #d6c5c5;border-radius:12px;background:white;color:#29212a;font:500 1rem var(--sans);height:53px}
+.law-search-form .btn{height:53px;white-space:nowrap;padding:10px 22px}.law-search-message{margin-top:14px;font-size:.92rem;color:#681d32}
+.law-search-samples{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.law-search-samples button{background:#fff;border:1px solid #c6a36b;border-radius:999px;color:#681d32;padding:7px 13px;cursor:pointer}
+:root[data-theme=dark] .law-search-panel{background:#30242d}:root[data-theme=dark] .law-search-panel h3,:root[data-theme=dark] .law-search-panel p{color:#f3eae7}:root[data-theme=dark] .law-search-message{color:#f0c8d4}
+@media(max-width:760px){.law-search-form{grid-template-columns:1fr}.law-search-form .btn{width:100%}}
+</style>
+<style>
+/* Selectable accent palettes, compatible with day and night modes */
+.palette-controls{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:999px;background:rgba(120,100,100,.09)}
+.palette-dot{height:25px;width:25px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15);cursor:pointer;flex-shrink:0}
+.palette-dot[data-palette=wine]{background:#681d32}.palette-dot[data-palette=ocean]{background:#176d91}.palette-dot[data-palette=forest]{background:#26735a}.palette-dot[data-palette=violet]{background:#7550a1}
+.palette-dot[aria-pressed=true]{outline:2px solid var(--gold);outline-offset:2px;transform:scale(1.1)}
+:root[data-palette=ocean]{--wine:#176d91;--deep:#123b55;--gold:#e0ae69;--beige:#eef7fa;--shadow:0 22px 60px rgba(18,59,85,.12)}
+:root[data-palette=forest]{--wine:#26735a;--deep:#173f35;--gold:#d7ac68;--beige:#f0f7f0;--shadow:0 22px 60px rgba(23,63,53,.12)}
+:root[data-palette=violet]{--wine:#7550a1;--deep:#392657;--gold:#e2b878;--beige:#f7f2fb;--shadow:0 22px 60px rgba(57,38,87,.12)}
+:root[data-palette]:not([data-palette=wine]) .hero{background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.16),transparent 40%),linear-gradient(120deg,var(--deep),var(--wine))}
+:root[data-palette]:not([data-palette=wine]) .journey{background:linear-gradient(180deg,#fff,var(--beige))}
+:root[data-palette]:not([data-palette=wine]) .journey-num,:root[data-palette]:not([data-palette=wine]) .float-icon{background:var(--wine)}
+:root[data-palette]:not([data-palette=wine]) .travel-photo figcaption{color:var(--deep)}
+:root[data-theme=dark][data-palette=ocean]{--wine:#76c7e7;--deep:#d9f2ff;--beige:#101f2b;--gold:#e0ae69;--ink:#f3f8fa}
+:root[data-theme=dark][data-palette=forest]{--wine:#8bd6b2;--deep:#e1f8e9;--beige:#11241e;--gold:#d7ac68;--ink:#f2f8f4}
+:root[data-theme=dark][data-palette=violet]{--wine:#c7a2f4;--deep:#f0e4ff;--beige:#21172d;--gold:#e2b878;--ink:#f8f3fc}
+:root[data-theme=dark][data-palette]:not([data-palette=wine]) .hero{background:linear-gradient(125deg,#17121d,#33313e,var(--beige))}
+:root[data-theme=dark][data-palette]:not([data-palette=wine]) .journey{background:#241b22}
+:root[data-theme=dark][data-palette]:not([data-palette=wine]) .journey-num{color:#18201e}
+@media(max-width:860px){.palette-controls{order:4;width:100%;justify-content:center;margin-bottom:7px}.palette-dot{width:29px;height:29px}}
+</style>
+<style>
+/* TourCheck refined editorial design */
+:root{--shadow:0 12px 36px rgba(45,18,30,.085)}
+body{line-height:1.65}
+.wrap{width:min(1100px,calc(100% - 36px))}
+section{padding:clamp(58px,8vw,96px) 0}
+section:not(.hero) h2{position:relative;padding-bottom:16px;margin-bottom:22px}
+section:not(.hero) h2::after{content:"";position:absolute;bottom:0;left:0;width:56px;height:3px;background:var(--gold);border-radius:5px}
+.journey-intro h2::after{left:50%!important;transform:translateX(-50%)}
+.hero{min-height:unset;padding:100px 0 105px}
+.hero-grid{grid-template-columns:1.05fr .95fr;align-items:center}
+.hero .design-strip{margin-top:30px;gap:9px}
+.design-pill{background:rgba(255,255,255,.07);backdrop-filter:blur(8px);font-size:.77rem}
+.hero-visual{transform:none;animation:none}
+.hero-visual>img{border-radius:180px 180px 22px 22px;max-height:480px}
+.hero-floating{left:-18px}
+.item,.card,.journey-step,.q,.travel-photo{box-shadow:var(--shadow)}
+.item{padding:23px;border-radius:18px}
+.card{border-top:0;border-left:4px solid var(--gold);border-radius:18px}
+.card h3{font-size:1.35rem}
+.panel{border-radius:22px}
+.journey{background:linear-gradient(180deg,#fff 0%,var(--beige) 100%)}
+.journey-step{border-radius:20px;padding-bottom:24px}
+.step-photo{height:210px}
+.journey-step:hover,.item:hover,.card:hover{transform:translateY(-4px)}
+.btn{border-radius:13px;padding:13px 22px}
+.btn.small{border-radius:12px}
+nav a{font-size:.85rem;padding:8px 10px}
+.bar{gap:12px}
+.logo{white-space:nowrap}
+.contact-panel{box-shadow:0 14px 38px rgba(0,0,0,.08)}
+:root[data-theme=dark] .journey{background:#241b22}
+:root[data-theme=dark] .card{border-left-color:var(--gold)}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero{padding:65px 0}.hero-visual{max-width:510px}.hero-visual>img{height:340px}}
+@media(max-width:860px){
+ .bar{display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:10px 0;min-height:0}
+ .logo{grid-column:1;grid-row:1}
+ .lang-switch{grid-column:2;grid-row:1;order:initial;margin:0}
+ .burger{grid-column:3;grid-row:1;order:initial}
+ .theme-controls{grid-column:1 / 3;grid-row:2;order:initial;margin:0}
+ .palette-controls{grid-column:3;grid-row:2;order:initial;width:auto;margin:0;padding:3px 5px}
+ .palette-dot{width:20px;height:20px}
+ .theme-btn{padding:7px 12px}
+ nav{top:100%;box-shadow:0 15px 25px rgba(0,0,0,.12)}
+ nav ul{gap:2px}nav a{font-size:.95rem;padding:12px 14px}
+}
+@media(max-width:500px){
+ .wrap{width:calc(100% - 30px)}
+ .logo{font-size:1.12rem}
+ .lang-switch button{font-size:.67rem;padding:6px 5px}
+ .hero h1{font-size:clamp(2.1rem,9.5vw,3.2rem)}
+ .hero p{font-size:1rem}
+ .hero-visual>img{height:280px}
+ .hero-floating{left:0;bottom:28px}
+ .design-pill{font-size:.7rem;padding:6px 10px}
+ .checklist,.cards{grid-template-columns:1fr}
+ .ring{width:190px;height:190px}
+ .journey-step .step-photo{height:195px}
+ .panel{padding:20px}
+ .btn{font-size:.9rem;padding:12px 17px}
+}
+</style><style>.ai-use-note{margin:24px 0 0;padding:12px 16px;border-left:3px solid var(--gold);border-radius:0 10px 10px 0;background:rgba(198,163,107,.09);font-size:.82rem;line-height:1.6;color:var(--ink)}.ai-use-note strong{color:var(--wine)}.ai-use-note [data-ai-lang]{display:none}:root[lang="kk"] .ai-use-note [data-ai-lang="kk"],:root[lang="ru"] .ai-use-note [data-ai-lang="ru"],:root[lang="en"] .ai-use-note [data-ai-lang="en"]{display:inline}</style><style>
+/* TourCheck KZ — refined motion, safe for Safari and offline HTML previews */
+@keyframes tcRise{from{opacity:.55;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tcShine{from{transform:translateX(-160%) skewX(-20deg)}to{transform:translateX(400%) skewX(-20deg)}}
+@keyframes tcGlow{0%,100%{opacity:.28;transform:scale(1)}50%{opacity:.52;transform:scale(1.12)}}
+@keyframes tcPulse{0%,100%{box-shadow:0 0 0 0 rgba(198,163,107,.26)}50%{box-shadow:0 0 0 12px rgba(198,163,107,0)}}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(236,191,121,.27),transparent 70%);pointer-events:none;animation:tcGlow 8s ease-in-out infinite}
+.hero .btn:first-child{position:relative;overflow:hidden;animation:tcPulse 3.5s ease-in-out infinite}
+.hero .btn:first-child::after{content:"";position:absolute;inset:0;width:32%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);transform:translateX(-160%) skewX(-20deg);animation:tcShine 5s ease-in-out infinite;pointer-events:none}
+.tc-animate{animation:tcRise .75s cubic-bezier(.2,.8,.2,1) both}
+.journey-step:nth-child(2).tc-animate,.item:nth-child(3n+2).tc-animate{animation-delay:.09s}
+.journey-step:nth-child(3).tc-animate,.item:nth-child(3n).tc-animate{animation-delay:.17s}
+.journey-step,.card,.item,.btn,.palette-dot{will-change:auto}
+.journey-step:hover .journey-num{transform:rotate(-8deg) scale(1.09);transition:transform .3s}
+.ring .fg{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+@media(hover:none){.journey-step:hover,.card:hover,.item:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){.hero::after,.hero .btn:first-child,.hero .btn:first-child::after,.tc-animate{animation:none!important}}
+</style>
+<style id="tc-motion-pack">
+/* TourCheck KZ — спокойные анимации. Контент не скрывается (fill-mode: backwards), при prefers-reduced-motion всё отключается. */
+@keyframes tcFadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes tcPop{0%{transform:scale(.5) rotate(-14deg)}60%{transform:scale(1.2) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+/* Первый экран: поэтапное появление */
+.hero h1{animation:tcFadeUp 1s cubic-bezier(.2,.8,.2,1) .1s backwards}
+.hero-grid>div:first-child>p{animation:tcFadeUp 1s cubic-bezier(.2,.8,.2,1) .28s backwards}
+.hero .btns{animation:tcFadeUp 1s cubic-bezier(.2,.8,.2,1) .45s backwards}
+.hero .design-pill{animation:tcFadeUp .8s cubic-bezier(.2,.8,.2,1) .65s backwards}
+.hero-floating{animation:tcFadeUp 1s cubic-bezier(.2,.8,.2,1) .9s backwards,gentleFloat 5s ease-in-out 1.9s infinite}
+/* Убираем лишнее мерцание кнопки */
+.hero .btn:first-child{animation:none}.hero .btn:first-child::after{display:none}
+/* Шапка */
+header{transition:box-shadow .35s}header.tc-scrolled{box-shadow:0 10px 30px rgba(45,18,30,.12)}
+/* Линия под заголовками */
+.tc-h2-pre::after{width:0!important;transition:width .9s cubic-bezier(.2,.8,.2,1) .15s}
+.tc-h2-pre.tc-h2-go::after{width:56px!important}
+/* Починка: hover карточек больше не блокируется анимацией появления */
+.tc-animate{animation-fill-mode:backwards}
+/* Чек-лист */
+.item.done .box{animation:tcPop .5s cubic-bezier(.3,1.4,.5,1)}
+/* Результаты */
+.risk-output li{animation:tcFadeUp .5s cubic-bezier(.2,.8,.2,1) backwards}
+.risk-output li:nth-child(2){animation-delay:.07s}.risk-output li:nth-child(3){animation-delay:.14s}.risk-output li:nth-child(n+4){animation-delay:.21s}
+.result.show .total{animation:tcFadeUp .6s ease .2s backwards}
+.q button[aria-expanded=true]+.ans p{animation:tcFadeUp .45s ease .08s backwards}
+</style>
+
+<style id="tc-sections-css">/* ===== Illustrations ===== */
+.il-bg{fill:var(--beige)}.il-w{fill:var(--wine)}.il-g{fill:var(--gold)}
+.sw{stroke:var(--wine)}.sg{stroke:var(--gold)}
+.hero-visual>svg.hero-art{display:block;width:100%;height:clamp(340px,44vw,500px);border-radius:180px 180px 22px 22px;overflow:hidden;box-shadow:0 40px 75px rgba(0,0,0,.32);animation:tcImgIn 1.3s cubic-bezier(.2,.8,.2,1) .2s backwards}
+.step-photo svg.step-art{width:100%;height:100%;display:block;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.journey-step:hover .step-photo svg{transform:scale(1.07)}
+.step-photo:after{display:none}
+.step-photo-credit{background:rgba(67,20,33,.55);padding:3px 9px;border-radius:99px;backdrop-filter:blur(6px)}
+@keyframes haDrift{from{transform:translateX(-14px)}to{transform:translateX(22px)}}
+@keyframes haBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes haBob2{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+@keyframes haPlane{0%,100%{transform:translate(26px,150px)}50%{transform:translate(40px,132px)}}
+@keyframes haDraw{from{stroke-dashoffset:44}to{stroke-dashoffset:0}}
+@keyframes haSun{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes haStamp{0%{opacity:0;transform:translate(196px,286px) rotate(-14deg) scale(2.2)}60%{opacity:1;transform:translate(196px,286px) rotate(-14deg) scale(.92)}100%{transform:translate(196px,286px) rotate(-14deg) scale(1)}}
+@keyframes haSignAnim{0%{stroke-dashoffset:260}55%,100%{stroke-dashoffset:0}}
+.ha-check{stroke-dasharray:44;animation:haDraw .6s ease backwards}
+.ha-check.c1{animation-delay:.9s}.ha-check.c2{animation-delay:1.25s}.ha-check.c3{animation-delay:1.6s}.ha-check.c4{animation-delay:1.95s}
+.ha-sign{stroke-dasharray:260;animation:haSignAnim 6s ease-in-out infinite}
+.ha-stamp{animation:haStamp .7s cubic-bezier(.3,1.4,.5,1) 2.3s backwards}
+.ha-float,.ha-float2{transform-box:fill-box}
+@media(max-width:900px){.hero-visual>svg.hero-art{height:360px}}
+@media(max-width:500px){.hero-visual>svg.hero-art{height:310px;border-radius:150px 150px 20px 20px}}
+
+/* AI language spans */
+.ai-i [data-ai-lang]{display:none}
+:root[lang="kk"] .ai-i [data-ai-lang="kk"],:root[lang="ru"] .ai-i [data-ai-lang="ru"],:root[lang="en"] .ai-i [data-ai-lang="en"]{display:inline}
+footer .ai-i{font-size:.85rem;opacity:.85}
+.hero .hero-ai{color:#fff;border-left-color:var(--gold);background:rgba(255,255,255,.08);max-width:56ch;margin-top:22px}
+.hero .hero-ai strong{color:#f1d6a7}
+.hero-visual>.hero-photo-credit{max-width:none}
+.theme-btn,nav a{white-space:nowrap}
+
+/* ===== Red flags ===== */
+.flags-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:8px}
+.flag{position:relative;background:var(--white,#fff);border:1px solid rgba(104,29,50,.12);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;transition:transform .35s,box-shadow .35s}
+.flag:hover{transform:translateY(-5px)}
+.flag::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--gold),var(--wine))}
+.flag>button{all:unset;box-sizing:border-box;display:block;width:100%;padding:24px 24px 20px 30px;cursor:pointer}
+.flag>button:focus-visible{outline:3px solid var(--gold);outline-offset:-4px;border-radius:22px}
+.flag .tag{margin-bottom:14px}
+.flag-ico{display:inline-block}
+@keyframes tcWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(12deg)}}
+.flag-clause{display:block;font:600 1.18rem/1.35 var(--serif);color:var(--deep)}
+.flag .more{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;font-weight:600;font-size:.9rem;color:var(--wine)}
+.flag .chev{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--beige);transition:transform .35s,background .3s}
+.flag.open .chev{transform:rotate(135deg);background:var(--gold)}
+.flag .why{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+.flag .why>div{overflow:hidden;min-height:0}
+.flag.open .why{grid-template-rows:1fr}
+.flag .why p{padding:0 24px 24px 30px;font-size:.95rem}
+.flag.open{border-color:var(--gold)}
+
+/* ===== Quiz ===== */
+.quiz{position:relative;overflow:hidden;max-width:780px}
+.quiz-top{display:flex;justify-content:space-between;font-weight:600;margin-bottom:12px;color:var(--deep)}
+.quiz-bar{height:8px;border-radius:99px;background:rgba(104,29,50,.13);overflow:hidden}
+.quiz-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--wine),var(--gold));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.quiz-q{font:700 clamp(1.25rem,3vw,1.75rem)/1.25 var(--serif);color:var(--deep);margin:26px 0 20px}
+.quiz-opts{display:grid;gap:12px}
+.qopt{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;background:var(--white,#fff);color:var(--ink);border:2px solid rgba(104,29,50,.14);border-radius:16px;padding:16px 18px;font:500 1rem/1.45 var(--sans);cursor:pointer;transition:transform .25s,border-color .25s,background .25s;animation:tcFadeUp .5s cubic-bezier(.2,.8,.2,1) backwards}
+.qopt:nth-child(2){animation-delay:.07s}.qopt:nth-child(3){animation-delay:.14s}
+.qopt .k{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:var(--beige);color:var(--wine);font-weight:700;font-size:.85rem;transition:background .25s,color .25s}
+.qopt:hover:not(:disabled){transform:translateX(6px);border-color:var(--gold)}
+.qopt:disabled{cursor:default}
+.qopt.right{border-color:#2e7d4f;background:rgba(46,125,79,.12);animation:tcPop .5s cubic-bezier(.3,1.4,.5,1)}
+.qopt.right .k{background:#2e7d4f;color:#fff}
+.qopt.wrong{border-color:#b3261e;background:rgba(179,38,30,.09);animation:tcShake .45s}
+.qopt.wrong .k{background:#b3261e;color:#fff}
+.qopt.dim{opacity:.55}
+@keyframes tcShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.qfb{margin-top:18px}
+.qfb .msg{margin:0}
+.qfb .msg b{display:block;margin-bottom:4px}
+.qfb .msg.ok b{color:#2e7d4f}.qfb .msg.no b{color:#b3261e}
+.qres{text-align:center;padding:10px 0 4px;position:relative}
+.qlabel{margin:0 auto 4px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem;color:var(--wine)}
+.qscore{font:700 clamp(4rem,14vw,6.5rem)/1 var(--serif);color:var(--wine);animation:tcPop .7s cubic-bezier(.3,1.4,.5,1)}
+.qscore small{font-size:.35em;opacity:.6}
+.qres .msg{text-align:left;max-width:520px;margin:18px auto}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:0;animation:tcFall 2.8s ease-in forwards}
+@keyframes tcFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(520px) rotate(720deg)}}
+
+/* ===== Steps ===== */
+.steps4{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;counter-reset:s;position:relative}
+.st{position:relative;counter-increment:s;background:var(--white,#fff);border:1px solid rgba(104,29,50,.12);border-radius:22px;padding:70px 24px 26px;box-shadow:var(--shadow);transition:transform .35s,box-shadow .35s}
+.st:hover{transform:translateY(-6px)}
+.st::before{content:counter(s);position:absolute;top:20px;left:24px;width:38px;height:38px;border-radius:12px;background:var(--wine);color:#fff;display:grid;place-items:center;font:700 1.1rem var(--serif)}
+.st::after{content:"";position:absolute;top:38px;left:72px;right:24px;height:2px;background:repeating-linear-gradient(90deg,var(--gold) 0 6px,transparent 6px 12px);opacity:.7}
+.st h3{font:600 1.08rem/1.3 var(--sans);margin-bottom:8px;color:var(--deep)}
+.st p{font-size:.93rem;opacity:.85}
+:root[data-theme=dark] .st::before{color:#1b1419}
+
+/* ===== Glossary ===== */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.term{position:relative;background:var(--beige);border:1px dashed rgba(104,29,50,.35);border-radius:18px;padding:22px 24px;transition:transform .3s,border-color .3s,background .3s,box-shadow .3s}
+.term:hover{transform:translateY(-4px);border-style:solid;border-color:var(--gold);box-shadow:var(--shadow)}
+.term dt{font:700 1.25rem var(--serif);color:var(--wine);margin-bottom:6px;display:inline-block;background:linear-gradient(var(--gold),var(--gold)) 0 100%/0 3px no-repeat;transition:background-size .4s}
+.term:hover dt{background-size:100% 3px}
+.term dd{font-size:.94rem}
+
+/* ===== About ===== */
+.about-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:22px}
+.about-two h3{font-size:1.3rem;margin-bottom:10px}
+.about-two ul{margin-left:20px}.about-two li{margin-bottom:8px}
+
+/* nav fits more links */
+@media(prefers-reduced-motion:reduce){.flag-ico{animation:none}.confetti{display:none}}
+
+
+.ha-float{animation:haBob 4.2s ease-in-out infinite}
+@media(min-width:861px) and (max-width:1380px){
+ .burger{display:block}
+ nav{position:absolute;top:68px;left:0;right:0;background:var(--beige);border-bottom:1px solid rgba(104,29,50,.15);display:none;padding:10px 20px 16px;box-shadow:0 18px 30px rgba(45,18,30,.12)}
+ nav.open{display:block}
+ nav ul{flex-direction:column}
+}
+</style>
+<style id="tourcheck-quest-style">
+.quest-shell{max-width:820px;margin:auto;background:radial-gradient(circle at 90% 0%,#393047,#171923 65%);border:1px solid #6b5260;border-radius:28px;padding:clamp(20px,4vw,38px);color:#f9f2e8;box-shadow:0 28px 65px #20152133;overflow:hidden}.quest-top,.quest-meta{display:flex;justify-content:space-between;align-items:center;gap:12px}.quest-top{font-size:1rem;color:#e8c992;letter-spacing:.04em}.quest-top span{background:#35303e;padding:8px 14px;border-radius:30px;color:#ffe2a3}.quest-meta{margin-top:25px;color:#d7c9bd;font-size:.82rem;font-weight:700}.quest-track{height:8px;border-radius:20px;background:#3a3848;overflow:hidden;margin:10px 0 22px}.quest-track>div{height:100%;width:0;background:linear-gradient(90deg,#bd9859,#f7d99e);transition:width .4s}.quest-scene{height:190px;border-radius:20px;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,#785d79,#34283d 52%,#201f31);overflow:hidden}.quest-scene-icon{font-size:6rem;z-index:1;filter:drop-shadow(0 15px 20px #0007);animation:questFloat 3s ease-in-out infinite}.quest-scene-glow{position:absolute;width:240px;height:240px;border:2px solid #c6a36b55;border-radius:50%;box-shadow:0 0 0 30px #c6a36b10,0 0 0 65px #c6a36b08}.quest-scene-label{position:absolute;bottom:13px;left:16px;z-index:2;font-size:.7rem;letter-spacing:.13em;color:#f4dba6;font-weight:700}@keyframes questFloat{50%{transform:translateY(-9px) rotate(3deg)}}.quest-shell h3{color:#fff;font-size:clamp(1.5rem,3.5vw,2.1rem);margin:24px 0 12px}.quest-shell p{color:#e5dce3;max-width:none}.quest-chat{background:#292b39;border-left:3px solid #c6a36b;padding:15px 18px;border-radius:0 14px 14px 0;margin:18px 0;font-size:.95rem;color:#f4e7d7}.quest-question{color:#f1d49b!important;font-weight:700;margin:20px 0 12px}.quest-options{display:grid;gap:11px}.quest-option{width:100%;text-align:left;background:#2b2d3b;border:1px solid #595364;border-radius:14px;color:white;padding:16px 18px;font:500 1rem/1.5 Inter,system-ui,sans-serif;cursor:pointer;transition:.2s}.quest-option:hover:not(:disabled),.quest-option:focus-visible{border-color:#e8c992;transform:translateX(3px)}.quest-option:disabled{cursor:default}.quest-option.chosen{border-color:#e8c992;background:#534333}.quest-option.correct{border-color:#76c99c;background:#254738}.quest-feedback{margin-top:18px;background:#292d38;border:1px solid #766750;border-radius:15px;padding:17px;color:#fff;line-height:1.6}.quest-feedback strong{display:block;color:#f4d99f;margin-bottom:7px}.quest-next{display:block;margin-top:18px;border:0;border-radius:12px;padding:14px 22px;background:#d4ac70;color:#241622;font-weight:800;cursor:pointer}.quest-next[hidden],.quest-feedback[hidden],#questEnd[hidden]{display:none}.quest-end-score{font-size:4rem;color:#f4d99f;font-family:Georgia,serif;text-align:center}.quest-end-title{text-align:center}.quest-end-text{text-align:center;margin:15px 0}.quest-end-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:20px}.quest-end-actions button,.quest-end-actions a{padding:12px 18px;border:1px solid #d4ac70;border-radius:12px;background:#d4ac70;color:#231923;text-decoration:none;font-weight:700;cursor:pointer}.quest-end-actions a{background:transparent;color:#f4d99f}@media(max-width:500px){.quest-shell{border-radius:18px;padding:18px}.quest-scene{height:155px}.quest-scene-icon{font-size:4.7rem}.quest-option{font-size:.92rem;padding:13px}}@media(prefers-reduced-motion:reduce){.quest-scene-icon{animation:none}}
+</style><style id="mobile-access-fix">
+@media(max-width:860px){
+  header{position:sticky;top:0;z-index:1000}
+  #nav{max-height:70vh;overflow-y:auto;z-index:1001}
+  #nav.open{display:block!important}
+  #quiz,#check{scroll-margin-top:125px}
+  .mobile-quick{display:flex!important;gap:9px;padding:10px 15px;background:var(--beige);border-bottom:1px solid rgba(104,29,50,.15);position:relative;z-index:20}
+  .mobile-quick a{flex:1;text-align:center;padding:12px 8px;border-radius:12px;background:var(--wine);color:#fff!important;text-decoration:none;font-weight:700;font-size:.85rem}
+  .mobile-quick a:nth-child(2){background:var(--gold);color:#271923!important}
+  .quest-option{min-height:54px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  .quest-shell{width:100%;max-width:100%}
+}
+@media(min-width:861px){.mobile-quick{display:none}}
+</style><style id="quest-static-style">
+html:not(.js) .quest-shell{display:none}
+.js #questStatic{display:none}
+#questStatic{max-width:820px;margin:auto;background:radial-gradient(circle at 90% 0%,#393047,#171923 65%);border:1px solid #6b5260;border-radius:28px;padding:clamp(20px,4vw,38px);color:#f9f2e8;counter-reset:sc;overflow:hidden}
+#questStatic input[type=radio]{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+#questStatic .qs-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#e8c992;letter-spacing:.04em}
+#questStatic .qst{display:none;margin-top:22px}
+#questStatic .qst1{display:block}
+#questStatic .qs-meta{display:flex;justify-content:space-between;color:#d7c9bd;font-size:.82rem;font-weight:700;margin-bottom:12px}
+#questStatic .qs-scene{display:grid;place-items:center;height:150px;border-radius:20px;position:relative;background:radial-gradient(circle at 50% 45%,#785d79,#34283d 52%,#201f31);margin-bottom:16px}
+#questStatic .qs-ico{font-size:4.5rem}
+#questStatic .qs-lbl{position:absolute;bottom:10px;left:14px;font-size:.7rem;letter-spacing:.13em;color:#f4dba6;font-weight:700}
+#questStatic h3{color:#fff;font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:10px}
+#questStatic .quest-chat{background:#2b2d3b;border-left:4px solid #e8c992;border-radius:12px;padding:12px 14px;margin:12px 0}
+#questStatic .quest-question{font-weight:700;color:#f4dba6;margin:14px 0 10px}
+#questStatic .qs-opts{display:grid;gap:11px}
+#questStatic .qs-opts label{display:block;background:#2b2d3b;border:1px solid #595364;border-radius:14px;padding:14px 16px;min-height:54px;cursor:pointer;font-size:.95rem;line-height:1.5;-webkit-tap-highlight-color:transparent}
+#questStatic .qs-fb{display:none;margin-top:14px;padding:14px;border-radius:12px;background:#1e2a25;line-height:1.55}
+#questStatic .qs-no{background:#3a2428}
+#questStatic .qs-fb strong{display:block;color:#f4d99f;margin-bottom:4px}
+#questStatic .qs-end{display:none;margin-top:26px;text-align:center}
+#questStatic .qs-score::after{content:counter(sc) " / 100 XP";font-size:3rem;color:#f4d99f;font-family:Georgia,serif}
+#questStatic .qs-end p{margin:10px 0}
+#questStatic button[type=reset]{margin-top:12px;padding:12px 20px;border:0;border-radius:12px;background:#d4ac70;color:#231923;font-weight:800;cursor:pointer;font-size:1rem}
+#questStatic input.g:checked{counter-increment:sc 20}
+#questStatic .qs-note{font-size:.8rem;opacity:.75;margin-top:22px}
+#questStatic input.g[name=s1]:checked~.qst1 .qs-ok,#questStatic input.b[name=s1]:checked~.qst1 .qs-no{display:block}
+#questStatic input[name=s1]:checked~.qst1 .qs-opts{pointer-events:none}
+#questStatic #s1a:checked~.qst1 label[for=s1a]{border-color:#e8c992;background:#534333}
+#questStatic #s1b:checked~.qst1 label[for=s1b]{border-color:#e8c992;background:#534333}
+#questStatic #s1c:checked~.qst1 label[for=s1c]{border-color:#e8c992;background:#534333}
+#questStatic input.g[name=s1]:checked~.qst1 .qs-opts label:nth-child(2),#questStatic input[name=s1]:checked~.qst1 .qs-opts label:nth-child(2){border-color:#76c99c;background:#254738}
+#questStatic input.g[name=s2]:checked~.qst2 .qs-ok,#questStatic input.b[name=s2]:checked~.qst2 .qs-no{display:block}
+#questStatic input[name=s2]:checked~.qst2 .qs-opts{pointer-events:none}
+#questStatic #s2a:checked~.qst2 label[for=s2a]{border-color:#e8c992;background:#534333}
+#questStatic #s2b:checked~.qst2 label[for=s2b]{border-color:#e8c992;background:#534333}
+#questStatic #s2c:checked~.qst2 label[for=s2c]{border-color:#e8c992;background:#534333}
+#questStatic input.g[name=s2]:checked~.qst2 .qs-opts label:nth-child(2),#questStatic input[name=s2]:checked~.qst2 .qs-opts label:nth-child(2){border-color:#76c99c;background:#254738}
+#questStatic input.g[name=s3]:checked~.qst3 .qs-ok,#questStatic input.b[name=s3]:checked~.qst3 .qs-no{display:block}
+#questStatic input[name=s3]:checked~.qst3 .qs-opts{pointer-events:none}
+#questStatic #s3a:checked~.qst3 label[for=s3a]{border-color:#e8c992;background:#534333}
+#questStatic #s3b:checked~.qst3 label[for=s3b]{border-color:#e8c992;background:#534333}
+#questStatic #s3c:checked~.qst3 label[for=s3c]{border-color:#e8c992;background:#534333}
+#questStatic input.g[name=s3]:checked~.qst3 .qs-opts label:nth-child(2),#questStatic input[name=s3]:checked~.qst3 .qs-opts label:nth-child(2){border-color:#76c99c;background:#254738}
+#questStatic input.g[name=s4]:checked~.qst4 .qs-ok,#questStatic input.b[name=s4]:checked~.qst4 .qs-no{display:block}
+#questStatic input[name=s4]:checked~.qst4 .qs-opts{pointer-events:none}
+#questStatic #s4a:checked~.qst4 label[for=s4a]{border-color:#e8c992;background:#534333}
+#questStatic #s4b:checked~.qst4 label[for=s4b]{border-color:#e8c992;background:#534333}
+#questStatic #s4c:checked~.qst4 label[for=s4c]{border-color:#e8c992;background:#534333}
+#questStatic input.g[name=s4]:checked~.qst4 .qs-opts label:nth-child(2),#questStatic input[name=s4]:checked~.qst4 .qs-opts label:nth-child(2){border-color:#76c99c;background:#254738}
+#questStatic input.g[name=s5]:checked~.qst5 .qs-ok,#questStatic input.b[name=s5]:checked~.qst5 .qs-no{display:block}
+#questStatic input[name=s5]:checked~.qst5 .qs-opts{pointer-events:none}
+#questStatic #s5a:checked~.qst5 label[for=s5a]{border-color:#e8c992;background:#534333}
+#questStatic #s5b:checked~.qst5 label[for=s5b]{border-color:#e8c992;background:#534333}
+#questStatic #s5c:checked~.qst5 label[for=s5c]{border-color:#e8c992;background:#534333}
+#questStatic input.g[name=s5]:checked~.qst5 .qs-opts label:nth-child(2),#questStatic input[name=s5]:checked~.qst5 .qs-opts label:nth-child(2){border-color:#76c99c;background:#254738}
+#questStatic input[name=s5]:checked~.qs-end{display:block}
+#questStatic input[name=s1]:checked~.qst2{display:block}
+#questStatic input[name=s2]:checked~.qst3{display:block}
+#questStatic input[name=s3]:checked~.qst4{display:block}
+#questStatic input[name=s4]:checked~.qst5{display:block}
+#questStatic input[name=s5]:checked~.qs-end{display:block}
+</style>
+<script>document.documentElement.className+=" js"</script>
+</head>
+<body>
+<div aria-hidden="true" class="scroll-progress" id="scrollProgress"></div>
+<header>
+<div class="wrap bar">
+<a class="logo" href="#home">TourCheck <span>KZ</span></a>
+<div aria-label="Website language" class="lang-switch" role="group"><button aria-pressed="true" data-lang="kk" type="button">ҚАЗ</button><button aria-pressed="false" data-lang="ru" type="button">РУС</button><button aria-pressed="false" data-lang="en" type="button">ENG</button></div><div aria-label="Түстер / Цвета / Colors" class="palette-controls" role="group"><button aria-label="Бордо" class="palette-dot" data-palette="wine" title="Бордо" type="button"></button><button aria-label="Көк / Синий" class="palette-dot" data-palette="ocean" title="Көк / Синий" type="button"></button><button aria-label="Жасыл / Зелёный" class="palette-dot" data-palette="forest" title="Жасыл / Зелёный" type="button"></button><button aria-label="Күлгін / Фиолетовый" class="palette-dot" data-palette="violet" title="Күлгін / Фиолетовый" type="button"></button></div><div class="theme-controls"><button aria-label="Тақырыпты ауыстыру" class="theme-btn" id="themeToggle" type="button">☾ Түнгі режим</button></div>
+<button aria-controls="nav" aria-expanded="false" aria-label="Мәзірді ашу" class="burger" id="burger">☰</button>
+<nav aria-label="Негізгі мәзір" id="nav">
+<ul><li><a href="#home">Басты бет</a></li><li><a href="#check">Шартты тексеру</a></li><li><a href="#calc">Калькулятор</a></li><li><a href="#flags">Қызыл жалаулар</a></li><li><a href="#quiz">TourCheck Quest</a></li><li><a href="#law">Заң және FAQ</a></li></ul>
+</nav>
+</div>
+</header><div class="mobile-quick" aria-label="Жылдам өту"><a href="#quiz" id="mobileQuestLink">🎮 Ойын / Игра</a><a href="#check" id="mobileCheckLink">✅ Тексеру / Проверка</a></div>
+<main>
+<!-- 1. HOME -->
+<section class="hero" id="home">
+<div class="wrap hero-grid">
+<div>
+<h1>Туристік шартқа қол қояр алдында нені тексеру керек?</h1>
+<p>Саяхатқа шықпас бұрын туристік шарттың маңызды талаптарын тексеріп, өз құқықтарыңыз туралы ақпарат алыңыз.</p>
+<div class="btns">
+<a class="btn" href="#check">Тексеруді бастау</a>
+<a class="btn ghost" href="#law">Заң туралы білу</a>
+</div>
+<div class="design-strip"><span class="design-pill">✦ Құқықтық ақпарат</span><span class="design-pill">✓ 12 тармақ</span><span class="design-pill">◈ Қазақстан заңнамасы</span></div><p class="ai-use-note hero-ai"><strong>AI · Claude  </strong><span data-ai-lang="kk">Бастапқы беттің суреті мен анимациялары Claude көмегімен жасалды.</span><span data-ai-lang="ru">Иллюстрация и анимации первого экрана созданы с помощью Claude.</span><span data-ai-lang="en">The hero illustration and animations were created with Claude.</span></p></div>
+<div class="hero-visual"><svg class="hero-art" viewBox="0 0 480 560" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustration: a checked travel contract, passport and shield">
+<defs><linearGradient id="haSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold);stop-opacity:.06"/><stop offset="1" style="stop-color:var(--gold);stop-opacity:.5"/></linearGradient></defs>
+<rect class="il-bg" width="480" height="560"/><rect width="480" height="560" fill="url(#haSky)"/>
+<circle class="il-g ha-sun" cx="352" cy="132" r="62" opacity=".35"/><circle class="il-g" cx="352" cy="132" r="40" opacity=".7"/>
+<g class="ha-cloud"><ellipse cx="92" cy="104" rx="48" ry="13" fill="#fff" opacity=".85"/><ellipse cx="122" cy="92" rx="30" ry="14" fill="#fff" opacity=".85"/></g>
+<g class="ha-cloud ha-cloud2"><ellipse cx="400" cy="250" rx="40" ry="11" fill="#fff" opacity=".7"/><ellipse cx="418" cy="240" rx="24" ry="11" fill="#fff" opacity=".7"/></g>
+<path class="il-w" opacity=".14" d="M0 470L90 350L170 430L260 320L360 440L420 380L480 440V560H0Z"/>
+<path class="il-w" opacity=".28" d="M0 505L120 425L220 490L330 410L480 505V560H0Z"/>
+<rect class="il-w" y="522" width="480" height="38"/>
+<g class="ha-plane" transform="translate(26 150)"><path d="M-40 96Q6 80 52 38" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 8" stroke-linecap="round" opacity=".95"/><g transform="translate(52 34)"><polygon points="0,30 44,0 28,40 16,26" fill="#fff"/><polygon points="16,26 44,0 20,30" class="il-g"/></g></g>
+<g transform="translate(112 146)"><rect x="9" y="14" width="250" height="334" rx="20" fill="#000" opacity=".14"/><rect width="250" height="334" rx="20" fill="#fffdf9"/>
+<path d="M0 20A20 20 0 0 1 20 0H230A20 20 0 0 1 250 20V68H0Z" class="il-w"/><rect x="24" y="22" width="112" height="10" rx="5" fill="#fff" opacity=".92"/><rect x="24" y="42" width="72" height="8" rx="4" fill="#fff" opacity=".5"/><circle cx="208" cy="36" r="15" class="il-g"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="40" cy="104" r="14" class="sw" stroke-width="2.5"/><path class="sw ha-check c1" stroke-width="4" d="M33 104l5 6 10-12"/>
+<circle cx="40" cy="152" r="14" class="sw" stroke-width="2.5"/><path class="sw ha-check c2" stroke-width="4" d="M33 152l5 6 10-12"/>
+<circle cx="40" cy="200" r="14" class="sw" stroke-width="2.5"/><path class="sw ha-check c3" stroke-width="4" d="M33 200l5 6 10-12"/>
+<circle cx="40" cy="248" r="14" class="sg" stroke-width="2.5"/><path class="sg ha-check c4" stroke-width="4" d="M40 241v8M40 254.5v.5"/></g>
+<g fill="#d9cfc0"><rect x="66" y="95" width="150" height="8" rx="4"/><rect x="66" y="143" width="130" height="8" rx="4"/><rect x="66" y="191" width="150" height="8" rx="4"/><rect x="66" y="239" width="120" height="8" rx="4"/></g>
+<g fill="#eadfd0"><rect x="66" y="108" width="96" height="7" rx="3.5"/><rect x="66" y="156" width="110" height="7" rx="3.5"/><rect x="66" y="204" width="90" height="7" rx="3.5"/><rect x="66" y="252" width="104" height="7" rx="3.5"/></g>
+<path class="sw ha-sign" d="M26 305q16-34 30-6t30-4 28 4" fill="none" stroke-width="3" stroke-linecap="round"/><rect x="24" y="314" width="150" height="2" fill="#d9cfc0"/>
+<g class="ha-stamp" transform="translate(196 286) rotate(-14)"><circle r="31" fill="none" class="sw" stroke-width="4" opacity=".85"/><circle r="23" fill="none" class="sw" stroke-width="1.5" opacity=".85"/><path d="M-11 1l8 9 15-19" fill="none" class="sw" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></g></g>
+<g transform="translate(34 388) rotate(-11)"><g class="ha-float2"><rect x="5" y="8" width="98" height="132" rx="10" fill="#000" opacity=".16"/><rect width="98" height="132" rx="10" class="il-w"/><circle cx="49" cy="50" r="23" fill="none" class="sg" stroke-width="3"/><ellipse cx="49" cy="50" rx="9" ry="23" fill="none" class="sg" stroke-width="2"/><path class="sg" d="M26 50H72" stroke-width="2"/><rect x="22" y="94" width="54" height="7" rx="3.5" class="il-g"/><rect x="30" y="108" width="38" height="5" rx="2.5" class="il-g" opacity=".6"/></g></g>
+<g transform="translate(344 352)"><g class="ha-float"><path d="M46 4L92 20V62C92 96 70 116 46 128C22 116 0 96 0 62V20Z" fill="#000" opacity=".15" transform="translate(4 6)"/><path d="M46 0L92 16V58C92 92 70 112 46 124C22 112 0 92 0 58V16Z" class="il-g"/><path d="M27 60l14 15 26-32" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+</svg><div class="hero-floating"><span class="float-icon">✈</span><span>TourCheck KZ<br/><strong>Travel smart. Know your rights.</strong></span></div><small class="hero-photo-credit ai-i"><span data-ai-lang="kk">Иллюстрация — SVG, Claude (AI) көмегімен жасалған түпнұсқа сурет.</span><span data-ai-lang="ru">Иллюстрация — оригинальный SVG, создан с помощью Claude (AI).</span><span data-ai-lang="en">Illustration — original SVG created with Claude (AI).</span></small></div>
+</div>
+</section>
+<!-- Guided visitor scenario -->
+<section aria-labelledby="journeyTitle" class="journey" id="journey">
+<div class="wrap">
+<div class="journey-intro reveal">
+<h2 id="journeyTitle">Сіз туристік агенттікке келдіңіз. Енді не істеу керек?</h2>
+<p class="lead">Сіз демалысқа жолдама алғыңыз келеді. Ақша төлемей және шартқа қол қоймай тұрып, осы үш қадамды орындаңыз.</p>
+</div>
+<div class="journey-steps">
+<article class="journey-step reveal"><div class="step-photo"><svg class="step-art" viewBox="0 0 500 245" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect class="il-bg" width="500" height="245"/><rect class="il-w" opacity=".10" width="500" height="245"/><circle class="il-g" cx="420" cy="52" r="70" opacity=".22"/><ellipse cx="90" cy="48" rx="44" ry="12" fill="#fff" opacity=".7"/><ellipse cx="112" cy="38" rx="26" ry="12" fill="#fff" opacity=".7"/><rect class="il-w" x="0" y="214" width="500" height="31" opacity=".85"/><rect x="132" y="104" width="200" height="112" rx="6" fill="#fffdf9"/>
+<path class="il-w" d="M120 80H344L354 114H110Z"/><path d="M128 82h22l-3 32h-22z" fill="#fff" opacity=".92"/><path d="M202 82h22l-3 32h-22z" fill="#fff" opacity=".92"/><path d="M276 82h22l-3 32h-22z" fill="#fff" opacity=".92"/><rect class="il-g" x="196" y="52" width="76" height="24" rx="7"/><path d="M222 64h24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+<rect x="216" y="148" width="48" height="68" rx="4" class="il-g"/><circle cx="256" cy="184" r="3" fill="#fff"/>
+<g fill="#e5dccf"><rect x="148" y="132" width="50" height="40" rx="4"/><rect x="282" y="132" width="36" height="40" rx="4"/></g><path d="M173 132v40M148 152h50" stroke="#fffdf9" stroke-width="3"/>
+<g class="ha-float"><circle cx="388" cy="118" r="46" fill="#fff" fill-opacity=".45" class="sw" stroke-width="9"/><path d="M366 118l16 17 28-34" fill="none" class="sg" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M421 152l40 46" class="sw" stroke-width="15" stroke-linecap="round"/></g></svg><span class="step-photo-credit">AI · SVG</span></div><span class="journey-num">01</span><h3>Турагенттік туралы ақпаратты тексеріңіз</h3><p>Компанияның толық атауын, байланыс деректерін және қызметті жүзеге асыруға құқығын сұраңыз. Ұсынылған мәліметтерді ресми дереккөздермен салыстырыңыз.</p></article>
+<article class="journey-step reveal"><div class="step-photo"><svg class="step-art" viewBox="0 0 500 245" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect class="il-bg" width="500" height="245"/><rect class="il-w" opacity=".10" width="500" height="245"/><circle class="il-g" cx="420" cy="52" r="70" opacity=".22"/><ellipse cx="90" cy="48" rx="44" ry="12" fill="#fff" opacity=".7"/><ellipse cx="112" cy="38" rx="26" ry="12" fill="#fff" opacity=".7"/><rect x="176" y="26" width="168" height="196" rx="16" fill="#000" opacity=".12" transform="translate(5 6)"/><rect x="176" y="26" width="168" height="196" rx="16" fill="#fffdf9"/><rect x="224" y="14" width="72" height="28" rx="9" class="il-w"/><circle cx="260" cy="28" r="5" class="il-g"/><rect x="206" y="66" width="18" height="18" rx="5" class="il-w" fill="" stroke="var(--wine)" stroke-width="2.5"/><path d="M210 75l4 4 7-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="236" y="67" width="88" height="7" rx="3.5" fill="#d9cfc0"/><rect x="236" y="77" width="56" height="5" rx="2.5" fill="#eadfd0"/><rect x="206" y="100" width="18" height="18" rx="5" class="il-w" fill="" stroke="var(--wine)" stroke-width="2.5"/><path d="M210 109l4 4 7-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="236" y="101" width="74" height="7" rx="3.5" fill="#d9cfc0"/><rect x="236" y="111" width="70" height="5" rx="2.5" fill="#eadfd0"/><rect x="206" y="134" width="18" height="18" rx="5" class="il-w" fill="" stroke="var(--wine)" stroke-width="2.5"/><path d="M210 143l4 4 7-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="236" y="135" width="96" height="7" rx="3.5" fill="#d9cfc0"/><rect x="236" y="145" width="44" height="5" rx="2.5" fill="#eadfd0"/><rect x="206" y="168" width="18" height="18" rx="5" class="" fill="none" stroke="var(--wine)" stroke-width="2.5"/><rect x="236" y="169" width="64" height="7" rx="3.5" fill="#d9cfc0"/><rect x="236" y="179" width="60" height="5" rx="2.5" fill="#eadfd0"/>
+<g class="ha-float2"><rect x="58" y="86" width="86" height="88" rx="12" fill="#fffdf9"/><path d="M58 98a12 12 0 0 1 12-12h62a12 12 0 0 1 12 12v18H58z" class="il-w"/><g class="il-g"><circle cx="82" cy="136" r="5"/><circle cx="101" cy="136" r="5"/><circle cx="120" cy="136" r="5"/><circle cx="82" cy="155" r="5"/><circle cx="101" cy="155" r="5" class="il-w"/></g></g>
+<g transform="translate(372 92) rotate(12)"><g class="ha-float"><rect width="76" height="84" rx="12" class="il-g"/><circle cx="38" cy="18" r="6" fill="#fffdf9"/><rect x="16" y="38" width="44" height="7" rx="3.5" fill="#fff" opacity=".9"/><rect x="16" y="54" width="30" height="7" rx="3.5" fill="#fff" opacity=".6"/></g></g><rect class="il-w" x="0" y="222" width="500" height="23" opacity=".85"/></svg><span class="step-photo-credit">AI · SVG</span></div><span class="journey-num">02</span><h3>Турдың барлық шарттарын нақтылаңыз</h3><p>Бағасын, күндерін, қонақүйді, ұшуды, сақтандыруды, қосымша төлемдерді және турдан бас тарту талаптарын жазбаша түрде біліңіз.</p></article>
+<article class="journey-step reveal"><div class="step-photo"><svg class="step-art" viewBox="0 0 500 245" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect class="il-bg" width="500" height="245"/><rect class="il-w" opacity=".10" width="500" height="245"/><circle class="il-g" cx="420" cy="52" r="70" opacity=".22"/><ellipse cx="90" cy="48" rx="44" ry="12" fill="#fff" opacity=".7"/><ellipse cx="112" cy="38" rx="26" ry="12" fill="#fff" opacity=".7"/><rect class="il-w" x="0" y="214" width="500" height="31" opacity=".85"/><rect x="150" y="34" width="200" height="190" rx="14" fill="#000" opacity=".12" transform="translate(5 6)"/><rect x="150" y="34" width="200" height="190" rx="14" fill="#fffdf9"/>
+<g fill="#d9cfc0"><rect x="176" y="62" width="110" height="8" rx="4"/><rect x="176" y="82" width="148" height="7" rx="3.5"/><rect x="176" y="98" width="130" height="7" rx="3.5"/><rect x="176" y="114" width="148" height="7" rx="3.5"/><rect x="176" y="130" width="96" height="7" rx="3.5"/></g>
+<path class="sw ha-sign" d="M178 184q14-30 26-4t26-2 26 4 22-8" fill="none" stroke-width="4" stroke-linecap="round"/><rect x="176" y="196" width="150" height="2" fill="#d9cfc0"/>
+<g transform="translate(300 118) rotate(38)"><g class="ha-float2"><rect width="16" height="96" rx="5" class="il-w"/><rect y="86" width="16" height="12" class="il-g"/><path d="M0 98h16l-8 20z" class="il-g"/></g></g>
+<g class="ha-float"><circle cx="352" cy="58" r="30" class="il-g"/><path d="M338 58l10 11 18-23" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span class="step-photo-credit">AI · SVG</span></div><span class="journey-num">03</span><h3>Шартты оқып, содан кейін ғана қол қойыңыз</h3><p>Ауызша уәделердің шартта көрсетілгеніне көз жеткізіңіз. Түсініксіз талаптарды нақтылаңыз, төлем құжаттары мен шарттың көшірмесін сақтаңыз.</p></article>
+</div>
+<div class="journey-actions reveal"><a class="btn" href="#check">12 тармақ бойынша шартты тексеру</a><a class="btn ghost" href="#law">Заңдағы құқықтарымды көру</a></div>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">Үш қадамдық нұсқаулықтың мәтіні мен дизайны ChatGPT көмегімен әзірленді. Суреттер (SVG) мен анимациялар Claude (AI) көмегімен жасалды.</span><span data-ai-lang="ru">Текст и дизайн инструкции из трёх шагов подготовлены с помощью ChatGPT. Иллюстрации (SVG) и анимации созданы с помощью Claude (AI).</span><span data-ai-lang="en">The three-step guide’s text and design were developed with ChatGPT. The illustrations (SVG) and animations were created with Claude (AI).</span></p></div>
+</section>
+<!-- 2. CHECKLIST -->
+<section id="check">
+<div class="wrap">
+<h2 class="reveal">Шартты тексеру</h2>
+<p class="lead reveal">Шартты оқып отырып, әр тармақты тексеріп, белгілеңіз. Белгілеріңіз осы құрылғыда сақталады, жеке деректер сұралмайды.</p>
+<div class="msg">Қалай пайдалану керек: шартты ашып, әр тармақты салыстырыңыз; нақты тексерілген тармақтарды белгілеңіз; күмәнді шарттарды «Тәуекелдер» бөлімінде таңдаңыз; соңында есепті сақтаңыз.</div>
+<div class="checklist" id="checklist"></div>
+<div class="tools">
+<button class="btn ghost" id="clearBtn" type="button">Барлығын тазалау</button>
+<a class="btn small" href="#calc">Нәтижені көру</a>
+</div>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">12 тармақтан тұратын чек-листтің құрылымы мен интерактивті функциясы ChatGPT көмегімен жасалды.</span><span data-ai-lang="ru">Структура чек-листа из 12 пунктов и интерактивная функция созданы с помощью ChatGPT.</span><span data-ai-lang="en">The 12-point checklist structure and interactive feature were created with ChatGPT.</span></p></div>
+</section>
+<!-- 3 + 4. CALCULATORS -->
+<section class="alt" id="calc">
+<div class="wrap">
+<h2 class="reveal">Шартты тексеру калькуляторы</h2>
+<p class="lead reveal">Белгіленген тармақтар санына қарай тексеру барысын көрсетеді.</p>
+<div class="panel reveal">
+<div class="check-grid">
+<div aria-label="Тексеру барысы" class="ring" id="ringBox" role="img">
+<svg viewbox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="88"></circle><circle class="fg" cx="100" cy="100" id="ringFg" r="88"></circle></svg>
+<div class="num"><span id="pct">0%</span><small>тексерілді</small></div>
+</div>
+<div>
+<div class="stats">
+<div class="stat"><b id="doneN">0</b>Тексерілген тармақ</div>
+<div class="stat"><b id="leftN">12</b>Қалған тармақ</div>
+</div>
+<p aria-live="polite" class="msg" id="msg"></p>
+<p><strong>Тексерілмеген тармақтар:</strong></p>
+<ul id="missing"></ul>
+<p class="note">Назар аударыңыз: пайыз тек белгіленген тармақтар санын көрсетеді. Ол шарттың заңдылығын немесе қауіпсіздігін кепілдемейді.</p>
+</div>
+</div>
+</div>
+<h2 class="reveal" style="margin-top:72px">Турдың жалпы құнын есептеу</h2>
+<p class="lead reveal">Сомаларды теңгемен енгізіңіз. Бұл тек шамамен есептеу, ол турфирманың заңды міндеттемелерін анықтамайды.</p>
+<form class="panel reveal" id="costForm" novalidate="">
+<div class="form-grid">
+<div><label for="f_tour">Турдың негізгі бағасы (₸)</label><input id="f_tour" inputmode="decimal" min="0" placeholder="0" step="any" type="number"/><div class="err" id="e_f_tour"></div></div>
+<div><label for="f_ins">Сақтандыру құны (₸)</label><input id="f_ins" inputmode="decimal" min="0" placeholder="0" step="any" type="number"/><div class="err" id="e_f_ins"></div></div>
+<div><label for="f_visa">Виза шығындары (₸)</label><input id="f_visa" inputmode="decimal" min="0" placeholder="0" step="any" type="number"/><div class="err" id="e_f_visa"></div></div>
+<div><label for="f_add">Қосымша қызметтер (₸)</label><input id="f_add" inputmode="decimal" min="0" placeholder="0" step="any" type="number"/><div class="err" id="e_f_add"></div></div>
+<div><label for="f_other">Басқа шығындар (₸)</label><input id="f_other" inputmode="decimal" min="0" placeholder="0" step="any" type="number"/><div class="err" id="e_f_other"></div></div>
+</div>
+<div class="tools">
+<button class="btn" type="submit">Жалпы соманы есептеу</button>
+<button class="btn ghost" id="costReset" type="button">Тазалау</button>
+</div>
+<p class="formmsg" id="costErr" role="alert"></p>
+<div aria-live="polite" class="result" id="result">
+<div class="row"><span>Турдың негізгі құны</span><b id="r_base"></b></div>
+<div class="row"><span>Қосымша шығындар сомасы</span><b id="r_extra"></b></div>
+<div class="total" id="r_total"></div>
+</div>
+</form>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">Тексеру прогресі мен тур құнын есептейтін калькуляторлар ChatGPT көмегімен бағдарламаланды.</span><span data-ai-lang="ru">Калькуляторы прогресса проверки и стоимости тура запрограммированы с помощью ChatGPT.</span><span data-ai-lang="en">The checklist progress and trip-cost calculators were programmed with ChatGPT.</span></p></div>
+</section>
+<!-- Additional legal self-assessment -->
+<section aria-labelledby="riskTitle" id="risks">
+<div class="wrap">
+<h2 id="riskTitle">Шарттағы ықтимал тәуекелдер</h2>
+<p class="lead">Шарттан байқаған мәселелерді таңдаңыз. Бұл автоматты заңдық қорытынды емес, мұқият тексеруге арналған ұсыныстар.</p>
+<div class="panel">
+<div class="risk-options" id="riskOptions"></div>
+<div class="tools"><button class="btn" id="riskReview" type="button">Ұсыныстарды көрсету</button><button class="btn ghost" id="riskClear" type="button">Таңдауды тазалау</button></div>
+<div aria-live="polite" class="risk-output" id="riskOutput"></div>
+</div>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">Тәуекелдерді белгілеу және ұсыныстарды көрсету функциясы ChatGPT көмегімен әзірленді.</span><span data-ai-lang="ru">Функция выбора рисков и показа рекомендаций разработана с помощью ChatGPT.</span><span data-ai-lang="en">The risk-selection and recommendation feature was developed with ChatGPT.</span></p></div>
+</section>
+<section aria-labelledby="reportTitle" class="alt" id="report">
+<div class="wrap">
+<h2 id="reportTitle">Тексеру нәтижесін сақтау</h2>
+<p class="lead">Чек-лист пен ықтимал тәуекелдер бойынша қысқаша есепті жүктеп алыңыз немесе басып шығарыңыз. Деректер тек осы браузерде өңделеді.</p>
+<div class="tools"><button class="btn" id="downloadReport" type="button">Есепті жүктеу (.txt)</button><button class="btn ghost" id="printReport" type="button">Басып шығару / PDF</button></div>
+<div aria-live="polite" class="panel report-preview" id="reportPreview"></div>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">Тексеру есебін қалыптастыру және сақтау функциясы ChatGPT көмегімен жасалды.</span><span data-ai-lang="ru">Функция формирования и сохранения отчёта создана с помощью ChatGPT.</span><span data-ai-lang="en">The report generation and saving feature was created with ChatGPT.</span></p></div>
+</section>
+<section id="flags"><div class="wrap"><h2 class="reveal">Шарттағы «қызыл жалаулар»</h2><p class="lead reveal">Төменде — оқу мақсатында ойдан құрастырылған шарт тармақтары. Әрқайсысын басып, неге мұқият болу керегін қараңыз.</p><div class="flags-grid"><article class="flag reveal"><button type="button" aria-expanded="false"><span class="tag"><span class="flag-ico" aria-hidden="true">⚑</span> Үлгі</span><span class="flag-clause">«Турагенттік ешқандай жағдайда жауап бермейді.»</span><span class="more">Неге бұл қауіпті?<span class="chev" aria-hidden="true">＋</span></span></button><div class="why"><div><p>Жауапкершіліктен толық босату тұтынушының құқықтарын шектеуі мүмкін. Бұл тармақты түсіндіруді немесе өзгертуді сұраңыз және заң мәтінімен салыстырыңыз.</p></div></div></article><article class="flag reveal"><button type="button" aria-expanded="false"><span class="tag"><span class="flag-ico" aria-hidden="true">⚑</span> Үлгі</span><span class="flag-clause">«Қажет болса, қосымша төлемдер бөлек есептеледі.»</span><span class="more">Неге бұл қауіпті?<span class="chev" aria-hidden="true">＋</span></span></button><div class="why"><div><p>Қосымша төлемдердің түрі мен мөлшері көрсетілмесе, түпкілікті баға белгісіз болады. Тізімді және сомаларды жазбаша сұраңыз.</p></div></div></article><article class="flag reveal"><button type="button" aria-expanded="false"><span class="tag"><span class="flag-ico" aria-hidden="true">⚑</span> Үлгі</span><span class="flag-clause">«Төленген ақша ешқандай жағдайда қайтарылмайды.»</span><span class="more">Неге бұл қауіпті?<span class="chev" aria-hidden="true">＋</span></span></button><div class="why"><div><p>Ақшаны қайтару шарттары шартқа және заңға байланысты, сондықтан тым қатаң тұжырымды нақтылаған жөн. Нақты ережелерді қолданыстағы заңнамадан тексеріңіз.</p></div></div></article><article class="flag reveal"><button type="button" aria-expanded="false"><span class="tag"><span class="flag-ico" aria-hidden="true">⚑</span> Үлгі</span><span class="flag-clause">«Қонақүй алдын ала хабарламай ауыстырылуы мүмкін.»</span><span class="more">Неге бұл қауіпті?<span class="chev" aria-hidden="true">＋</span></span></button><div class="why"><div><p>Қонақүй — шарттың маңызды бөлігі. Ауыстыру қандай жағдайда, қандай деңгейге және қалай ескертіліп жасалатынын жазбаша нақтылаңыз.</p></div></div></article></div><p class="note">Бұл мысалдар оқу мақсатында ойдан құрастырылған және жеке заңгерлік кеңес болып табылмайды.</p><p class="ai-use-note"><strong>AI · Claude  </strong><span data-ai-lang="kk">«Қызыл жалаулар» мысалдары мен түсіндірмелер Claude көмегімен дайындалды; заң мәтінімен салыстырып тексеру қажет.</span><span data-ai-lang="ru">Примеры «красных флагов» и пояснения подготовлены с помощью Claude; их необходимо сверить с текстом закона.</span><span data-ai-lang="en">The red-flag examples and explanations were prepared with Claude; they should be checked against the text of the law.</span></p></div></section><section class="alt" id="quiz"><div class="wrap"><h2 id="questHeading">✈️ Айгерімнің саяхаты — TourCheck Quest</h2><p class="lead" id="questIntro">Интерактивті құқықтық оқиға: бес шешім қабылдап, саяхатты қауіпсіз сақтап қал!</p><div id="questStatic"><form onsubmit="return false"><div class="qs-top"><strong>✦ TOURCHECK QUEST</strong></div><input type="radio" name="s1" id="s1a" class="b"><input type="radio" name="s1" id="s1b" class="g"><input type="radio" name="s1" id="s1c" class="b"><input type="radio" name="s2" id="s2a" class="b"><input type="radio" name="s2" id="s2b" class="g"><input type="radio" name="s2" id="s2c" class="b"><input type="radio" name="s3" id="s3a" class="b"><input type="radio" name="s3" id="s3b" class="g"><input type="radio" name="s3" id="s3c" class="b"><input type="radio" name="s4" id="s4a" class="b"><input type="radio" name="s4" id="s4b" class="g"><input type="radio" name="s4" id="s4c" class="b"><input type="radio" name="s5" id="s5a" class="b"><input type="radio" name="s5" id="s5b" class="g"><input type="radio" name="s5" id="s5c" class="b"><div class="qst qst1"><div class="qs-meta"><span>1-ДЕҢГЕЙ</span><span>1 / 5</span></div><div class="qs-scene"><span class="qs-ico">📱</span><span class="qs-lbl">INSTAGRAM · ТУР ІЗДЕУ</span></div><h3>Арзан тур ма, әлде тұзақ па?</h3><p>22 жастағы Айгерім достарымен демалғысы келеді. Instagram-да 150 000 теңгеге 5 жұлдызды қонақүй, ұшақ және сақтандыру ұсынылады.</p><div class="quest-chat">Менеджер: «Тек бүгін жеңілдік! Соңғы екі орын қалды!»</div><p class="quest-question">Сен Айгерімнің орнында не істер едің?</p><div class="qs-opts"><label for="s1a">A.&nbsp; 💸 Бірден ақша аударамын</label><label for="s1b">B.&nbsp; 🔎 Компанияның БСН-ін, мәртебесін және құжаттарын тексеремін</label><label for="s1c">C.&nbsp; ❤️ Оқырман санына ғана сенемін</label></div><div class="qs-fb qs-ok"><strong>Дұрыс шешім! +20 XP</strong> <span>Жарнама мен оқырман саны сенімділік кепілі емес. Компанияның нақты деректерін, қызметін және төлем алушысын тексер.</span></div><div class="qs-fb qs-no"><strong>Қауіпті шешім · +0 XP</strong> <span>Жарнама мен оқырман саны сенімділік кепілі емес. Компанияның нақты деректерін, қызметін және төлем алушысын тексер.</span></div></div><div class="qst qst2"><div class="qs-meta"><span>2-ДЕҢГЕЙ</span><span>2 / 5</span></div><div class="qs-scene"><span class="qs-ico">💬</span><span class="qs-lbl">WHATSAPP · МЕНЕДЖЕР</span></div><h3>«Шартты оқудың қажеті жоқ»</h3><p>Менеджер WhatsApp арқылы шарт жібереді, бірақ «бәрі стандартты» деп асықтырады.</p><div class="quest-chat">Менеджер: «Қол қоя салыңыз, кейін бәрін түсіндіремін».</div><p class="quest-question">Не істейсің?</p><div class="qs-opts"><label for="s2a">A.&nbsp; ✍️ Оқымай қол қоямын</label><label for="s2b">B.&nbsp; 📄 Қонақүй, күндер, рейс, баға және қайтару шарттарын жазбаша нақтылаймын</label><label for="s2c">C.&nbsp; 🤝 Тек ауызша уәдеге сенемін</label></div><div class="qs-fb qs-ok"><strong>Дұрыс шешім! +20 XP</strong> <span>Маңызды уәделер шартта анық жазылуы керек. Түсініксіз тармақтарға қол қоюға асықпа.</span></div><div class="qs-fb qs-no"><strong>Қауіпті шешім · +0 XP</strong> <span>Маңызды уәделер шартта анық жазылуы керек. Түсініксіз тармақтарға қол қоюға асықпа.</span></div></div><div class="qst qst3"><div class="qs-meta"><span>3-ДЕҢГЕЙ</span><span>3 / 5</span></div><div class="qs-scene"><span class="qs-ico">💳</span><span class="qs-lbl">ТӨЛЕМ · ҚАУІП</span></div><h3>Ақшаны қайда аударамыз?</h3><p>Айгерімнен ақшаны белгісіз адамның жеке картасына аудару сұралады.</p><div class="quest-chat">Менеджер: «Компанияның шоты уақытша істемей тұр».</div><p class="quest-question">Қандай шешім қабылдайсың?</p><div class="qs-opts"><label for="s3a">A.&nbsp; 💸 Жеке картаға аударамын</label><label for="s3b">B.&nbsp; 🧾 Алушы деректерін шартпен салыстырып, ресми төлем құжатын сұраймын</label><label for="s3c">C.&nbsp; 🙈 Чек қажет емес деп ойлаймын</label></div><div class="qs-fb qs-ok"><strong>Дұрыс шешім! +20 XP</strong> <span>Төлем алушының кім екенін анықта, ресми төлем растауын сақта. Жеке картаға асығыс аудару — елеулі қауіп белгісі.</span></div><div class="qs-fb qs-no"><strong>Қауіпті шешім · +0 XP</strong> <span>Төлем алушының кім екенін анықта, ресми төлем растауын сақта. Жеке картаға асығыс аудару — елеулі қауіп белгісі.</span></div></div><div class="qst qst4"><div class="qs-meta"><span>4-ДЕҢГЕЙ</span><span>4 / 5</span></div><div class="qs-scene"><span class="qs-ico">🛫</span><span class="qs-lbl">ӘУЕЖАЙ · ТОСЫН ЖАҒДАЙ</span></div><h3>Билет жоқ. Менеджер жоғалды.</h3><p>Әуежайда Айгерімнің атына билет табылмайды. Қонақүй броні де расталмаған, Instagram парақшасы жойылған.</p><div class="quest-chat">Айгерім: «Енді не істеймін?!»</div><p class="quest-question">Алғашқы әрекет қандай?</p><div class="qs-opts"><label for="s4a">A.&nbsp; 🗑️ Хаттарды өшіремін</label><label for="s4b">B.&nbsp; 📸 Шартты, хаттарды, чектерді, жарнаманы сақтап, жақын адамыма хабарлаймын</label><label for="s4c">C.&nbsp; 📱 Тек әлеуметтік желіде шағымданамын</label></div><div class="qs-fb qs-ok"><strong>Дұрыс шешім! +20 XP</strong> <span>Дәлелдерді сақта: шарт, төлем чегі, хат алмасу, жарнама және бронь туралы ақпарат. Қажет болса, жақын адамдарыңнан немесе заңгерден көмек сұра.</span></div><div class="qs-fb qs-no"><strong>Қауіпті шешім · +0 XP</strong> <span>Дәлелдерді сақта: шарт, төлем чегі, хат алмасу, жарнама және бронь туралы ақпарат. Қажет болса, жақын адамдарыңнан немесе заңгерден көмек сұра.</span></div></div><div class="qst qst5"><div class="qs-meta"><span>5-ДЕҢГЕЙ</span><span>5 / 5</span></div><div class="qs-scene"><span class="qs-ico">⚖️</span><span class="qs-lbl">ҚҰҚЫҚ · ӘРЕКЕТ</span></div><h3>Өз құқығыңды қорға</h3><p>Айгерім алаяқтық болуы мүмкін екенін түсінеді. Енді дұрыс жолмен әрекет етуі керек.</p><div class="quest-chat">Досы: «Қайда жүгінеміз?»</div><p class="quest-question">Қай жол дұрыс?</p><div class="qs-opts"><label for="s5a">A.&nbsp; 😔 Ештеңе істемеймін</label><label for="s5b">B.&nbsp; 🛡️ Полицияға арыз беру мүмкіндігін қарастырып, тұтынушы құқығын қорғау жолдарын және шартты тексеремін</label><label for="s5c">C.&nbsp; 💬 Тек менеджерге қайта-қайта жазамын</label></div><div class="qs-fb qs-ok"><strong>Дұрыс шешім! +20 XP</strong> <span>Алаяқтық белгілері болса полицияға жүгінуге болады. Тұтынушы құқығын қорғау бойынша шағым жолдарын қарастыр; нақты рәсімдерді ресми порталдардан тексер.</span></div><div class="qs-fb qs-no"><strong>Қауіпті шешім · +0 XP</strong> <span>Алаяқтық белгілері болса полицияға жүгінуге болады. Тұтынушы құқығын қорғау бойынша шағым жолдарын қарастыр; нақты рәсімдерді ресми порталдардан тексер.</span></div></div><div class="qs-end"><div class="qs-score"></div><p>80+ XP — Саналы турист! 🏆<br>40–60 XP — Сен дұрыс жолдасың! 🌟<br>0–20 XP — Келесі сапарда абай бол! 🚩</p><p>Сен маңызды қауіптерді дер кезінде байқадың. Бірақ кез келген турды ресми деректермен және шартпен тексеру керек.</p><button type="reset">Қайта ойнау</button> <a href="#check" style="color:#f4d99f">12 тармақты тексеру</a></div><p class="qs-note">Оқиға ойдан шығарылған. Ойын құқықтық ақпарат береді, бірақ жеке заңгерлік кеңес емес.</p></form></div><div class="quest-shell" id="questShell"><div class="quest-top"><strong>✦ TOURCHECK QUEST</strong><span id="questXp">⭐ 0 XP</span></div><div class="quest-meta"><span id="questLevel">1-ДЕҢГЕЙ</span><span id="questCount">1 / 5</span></div><div class="quest-track"><div id="questProgress"></div></div><div class="quest-scene"><div class="quest-scene-icon" id="questIcon">📱</div><div class="quest-scene-glow"></div><div class="quest-scene-label" id="questSceneLabel">INSTAGRAM · ТУР ІЗДЕУ</div></div><h3 id="questTitle">Арзан тур ма, әлде тұзақ па?</h3><p id="questStory">22 жастағы Айгерім достарымен саяхатқа шықпақ. Instagram-да өте арзан тур ұсынды.</p><div class="quest-chat" id="questChat">Менеджер: «Жеңілдік тек бүгін!»</div><p class="quest-question" id="questQuestion">Сен не істер едің?</p><div id="questOptions" class="quest-options"><button class="quest-option" type="button" disabled>🔎 Компанияның БСН-ін және құжаттарын тексеремін</button><p>Ойынды бастау үшін сайтты Safari, Chrome немесе басқа браузерде ашыңыз. Егер бұл алдын ала қарау болса, сайт сілтемесін пайдаланыңыз.</p></div><div id="questFeedback" class="quest-feedback" aria-live="polite" hidden></div><button type="button" id="questNext" class="quest-next" hidden>Келесі деңгей →</button><div id="questEnd" hidden></div></div><p class="note" id="questDisclaimer">Оқиға ойдан шығарылған. Ойын құқықтық ақпарат береді, бірақ жеке заңгерлік кеңес емес.</p></div></section><!-- 5. LAW -->
+<section id="law">
+<div class="wrap">
+<h2 class="reveal">Заң туралы</h2>
+<p class="lead reveal">Төменде негізгі құқықтық ережелер қысқаша берілген. Бап атауын басып, «Әділет» порталындағы заң мәтінін қараңыз. Егер сілтеме қажетті бапқа бірден апармаса, ашылған құжаттан бап нөмірін іздеңіз.</p>
+<div class="law-search-panel reveal" id="lawSearchPanel">
+<h3 id="lawSearchTitle">🔎 Заң баптарын іздеу</h3>
+<p id="lawSearchDesc">Бап нөмірін енгізіңіз. Ресми «Әділет» порталында тиісті заң ашылады.</p>
+<form class="law-search-form" id="lawSearchForm">
+<div><label for="lawDocument" id="lawDocumentLabel">Заңды таңдаңыз</label><select id="lawDocument"><option value="tourism">Туристік қызмет туралы заң</option><option value="consumer">Тұтынушылардың құқықтарын қорғау туралы заң</option></select></div>
+<div><label for="lawArticle" id="lawArticleLabel">Бап нөмірі</label><input autocomplete="off" id="lawArticle" maxlength="45" placeholder="Мысалы: 15 бап, 17-бап, 8-1" required="" type="text"/></div>
+<button class="btn" id="lawSearchButton" type="submit">Іздеу ↗</button>
+</form>
+<div class="law-search-samples"><button data-article="15" type="button">15-бап</button><button data-article="17" type="button">17-бап</button><button data-article="8-1" type="button">8-1-бап</button></div>
+<p aria-live="polite" class="law-search-message" id="lawSearchMessage" role="status">Ескерту: бапқа тікелей өту «Әділет» сайтының сілтеме жүйесіне байланысты.</p>
+</div>
+<div class="cards"><article class="card reveal"><h3>Туристік қызмет көрсету шарты</h3><p>Туристік қызмет көрсету шартының талаптарын, қызмет құрамын және тараптардың міндеттерін мұқият оқыңыз. Шартты жазбаша рәсімдеу тәртібі заңда белгіленген.</p><p style="margin-top:12px;font-size:.9rem"><a href="https://adilet.zan.kz/kaz/docs/Z010000211_#z17" rel="noopener noreferrer" target="_blank">↗ Туристік қызмет туралы заң — 17-бап</a></p></article><article class="card reveal"><h3>Тұтынушының құқықтары</h3><p>Турист қызмет пен оның бағасы туралы ақпарат алуға, сапалы қызметті талап етуге және өз құқықтарын қорғауға құқылы.</p><p style="margin-top:12px;font-size:.9rem"><a href="https://adilet.zan.kz/kaz/docs/Z100000274_#z7" rel="noopener noreferrer" target="_blank">↗ Тұтынушылардың құқықтарын қорғау туралы заң — 7-бап</a></p></article><article class="card reveal"><h3>Құқықты шектейтін шарт талаптары</h3><p>Шартта тұтынушының заңмен қорғалатын құқықтарын негізсіз шектейтін талаптар болса, оларға ерекше назар аударыңыз.</p><p style="margin-top:12px;font-size:.9rem"><a href="https://adilet.zan.kz/kaz/docs/Z100000274_#z8-1" rel="noopener noreferrer" target="_blank">↗ Тұтынушылардың құқықтарын қорғау туралы заң — 8-1-бап</a></p></article><article class="card reveal"><h3>Турдан бас тарту және ақшаны қайтару</h3><p>Қайтарылатын ақша сомасы бас тарту себебіне, шартқа және қолданылатын заң нормаларына байланысты. Төлем құжаттарын сақтап, компаниядан жазбаша есеп сұраңыз.</p><p style="margin-top:12px;font-size:.9rem"><a href="https://adilet.zan.kz/kaz/docs/Z010000211_#z17" rel="noopener noreferrer" target="_blank">↗ Туристік қызмет туралы заң — 17-бап</a></p></article></div>
+<div class="verify reveal"><p><strong>Ескерту:</strong> Бұл ақпарат оқу-ағарту мақсатында берілген, жеке заңгерлік қорытынды емес. Чек-лист нәтижесі шарттың заңдылығын автоматты түрде анықтамайды. Нақты дау туындаса, шарттың мәтіні мен заңның қолданыстағы редакциясы жеке қаралуы тиіс.</p></div>
+<h2 class="reveal" style="margin-top:72px">Жиі қойылатын сұрақтар</h2>
+<div class="faq" id="faq"></div>
+<p class="ai-use-note"><strong>AI · ChatGPT  </strong><span data-ai-lang="kk">Құқықтық ақпаратты қысқаша баяндау, FAQ және заң баптарын іздеу интерфейсі ChatGPT көмегімен дайындалды. Заң мәтінінің ресми дереккөзі — «Әділет».</span><span data-ai-lang="ru">Краткое изложение правовой информации, FAQ и интерфейс поиска статей подготовлены с помощью ChatGPT. Официальный источник законов — «Әділет».</span><span data-ai-lang="en">The legal summaries, FAQ and article-search interface were prepared with ChatGPT. The official source of legislation is Adilet.</span></p></div>
+</section>
+<section id="about"><div class="wrap"><h2 class="reveal">Жоба туралы</h2><div class="cards"><article class="card reveal"><h3>Мақсаты</h3><p>Туристік шартқа қол қоймас бұрын нені тексеру керегін қарапайым тілмен түсіндіру.</p></article><article class="card reveal"><h3>Кімге арналған</h3><p>Саяхатқа шығатын және турагенттікпен шарт жасасатын адамдарға.</p></article><article class="card reveal"><h3>Шектеулер</h3><p>Сайт — оқу жобасы, жеке заңгерлік кеңес емес. Заң мәтінінің ресми дереккөзі — «Әділет».</p></article></div>
+<div class="about-two"><div class="panel reveal"><h3>Дереккөздер</h3><ul><li><a href="https://adilet.zan.kz/kaz/docs/Z010000211_" target="_blank" rel="noopener noreferrer">«Қазақстан Республикасындағы туристік қызмет туралы» Заң ↗</a></li><li><a href="https://adilet.zan.kz/kaz/docs/Z100000274_" target="_blank" rel="noopener noreferrer">«Тұтынушылардың құқықтарын қорғау туралы» Заң ↗</a></li></ul></div>
+<div class="panel reveal"><h3>Жасанды интеллект</h3><p>ЖИ мәтін, код және суреттер жасауға көмектесті. ЖИ дайындаған құқықтық мазмұн ресми дереккөздермен салыстырылып тексерілуі тиіс.</p></div></div>
+<p class="ai-use-note"><strong>AI · Claude  </strong><span data-ai-lang="kk">«Жоба туралы» бөлімі Claude көмегімен дайындалды.</span><span data-ai-lang="ru">Раздел «О проекте» подготовлен с помощью Claude.</span><span data-ai-lang="en">The “About” section was prepared with Claude.</span></p></div></section></main>
+<footer>
+<div class="wrap">
+<p>TourCheck KZ - оқу мақсатында жасалған ақпараттық веб-жоба.</p>
+<p>Жобаны әзірлеуде ChatGPT жасанды интеллекті пайдаланылды.</p><p class="ai-i"><span data-ai-lang="kk">Жаңа бөлімдер, суреттер (SVG) мен анимациялар Claude (Anthropic, AI) көмегімен жасалды.</span><span data-ai-lang="ru">Новые разделы, иллюстрации (SVG) и анимации созданы с помощью Claude (Anthropic, ИИ).</span><span data-ai-lang="en">The new sections, illustrations (SVG) and animations were created with Claude (Anthropic, AI).</span></p>
+<p>Негізгі дереккөз: Қазақстан Республикасындағы туристік қызмет туралы ҚР Заңы. <a href="https://adilet.zan.kz/kaz/docs/Z010000211_" rel="noopener noreferrer" target="_blank">adilet.zan.kz</a></p>
+<div class="author-credit">
+<p><strong>Автор / Автор / Author: Әдия Асқарова / Адия Аскарова / Adiya Askarova</strong></p>
+</div>
+<p><a href="#about">Жоба туралы</a></p><p class="warn">Бұл сайттағы ақпарат жалпы таныстыру мақсатында берілген және жеке заңгерлік кеңес болып табылмайды.</p>
+</div>
+</footer>
+<button aria-label="Жоғарыға оралу" id="top" type="button">↑</button>
+<script>
+/* ---------- Data ---------- */
+const ITEMS = [
+ ["Туристік компанияның атауы мен деректері","Шарттағы атау, мекенжай және байланыс деректері компанияның нақты мәліметтерімен сәйкес келе ме?"],
+ ["Лицензия және қызметті жүзеге асыру құқығы","Компанияның қызмет құқығы бар екенін растайтын құжаттарды сұраңыз және ресми дереккөзден тексеріңіз."],
+ ["Саяхаттың басталу және аяқталу күндері","Шығу, келу күндері мен уақыты шартта нақты жазылған ба?"],
+ ["Туристік бағыт және баратын ел","Ел, қала және маршрут нақты көрсетілген бе?"],
+ ["Қонақүй және орналастыру шарттары","Қонақүй атауы, нөмір түрі, тамақтану түрі мен жату мерзімі жазылған ба?"],
+ ["Көлік және тасымалдау шарттары","Рейс, жөнелу уақыты, трансфер және багаж шарттары көрсетілген бе?"],
+ ["Турдың толық құны","Нақты баға, валюта және төлем мерзімдері жазылған ба?"],
+ ["Қосымша төлемдер","Баға құрамына қандай қызметтер кіретіні және кірмейтіні анық па?"],
+ ["Сақтандыру шарттары","Сақтандыру түрі, сома және қамтылатын жағдайлар қарастырылған ба?"],
+ ["Шартты бұзу және ақшаны қайтару талаптары","Бас тарту шарттары, мерзімдері және қайтарылатын сома жазылған ба?"],
+ ["Тараптардың құқықтары мен міндеттері","Әр тараптың міндеттері түсінікті және теңгерімді ме?"],
+ ["Дауларды шешу және шағым беру тәртібі","Шағымды қайда және қалай беруге болатыны көрсетілген бе?"]
+];
+const FAQS = [
+ [
+  "Туристік шарт міндетті түрде жазбаша бола ма?",
+  "«Қазақстан Республикасындағы туристік қызмет туралы» Заңның 17-бабы бойынша, гидпен және экскурсия жүргізушімен жасалатын шарттарды қоспағанда, туристік қызмет көрсету шарты жазбаша жасалады."
+ ],
+ [
+  "Қол қоймас бұрын не тексеру керек?",
+  "Туроператордың атауын, маршрут пен күндерді, қонақүй мен тасымалдауды, баға құрамын, сақтандыруды, бас тарту және шағым беру шарттарын тексеріңіз."
+ ],
+ [
+  "Туроператор мен турагенттің айырмашылығы қандай?",
+  "Туроператор туристік өнімді қалыптастырады, ал турагент оны агенттік шарт негізінде ұсынады және өткізеді. Қараңыз: туристік қызмет туралы Заңның 1 және 15-1-баптары."
+ ],
+ [
+  "Турдан бас тартсам, барлық ақша қайтарыла ма?",
+  "Әрдайым емес. Жауап шарт талаптарына, бас тарту себебіне және заңға байланысты. Заңның 17-бабының 9–11-тармақтарын қараңыз; қайтару сомасын автоматты түрде болжауға болмайды."
+ ],
+ [
+  "Шартта компания барлық жауапкершіліктен босатылса ше?",
+  "Мұндай талап тұтынушы құқықтарын шектеуі мүмкін. «Тұтынушылардың құқықтарын қорғау туралы» Заңның 8-1-бабы шарттағы құқық бұзатын талаптарға тыйым салады."
+ ],
+ [
+  "Құқықтарым бұзылса не істеймін?",
+  "Дәлелдерді сақтап, компанияға жазбаша шағым беріңіз. Жағдай шешілмесе, құзыретті органға немесе сотқа жүгіну жолын қарастырыңыз. Нақты рәсім мен мерзімдерді қолданыстағы заңнан тексеріңіз."
+ ],
+ [
+  "Шағым (претензия) дегеніміз не?",
+  "Бұл — компанияға жолданатын жазбаша талап. Мәселені, талабыңызды және мерзімді нақты көрсетіп, өтініштің көшірмесін сақтаңыз."
+ ]
+];
+const KEY = "tourcheck_checked_v1";
+const $ = id => document.getElementById(id);
+
+/* ---------- Checklist state (localStorage) ---------- */
+let checked = new Array(ITEMS.length).fill(false);
+function loadState(){
+ try{
+  const s = JSON.parse(localStorage.getItem(KEY));
+  if(Array.isArray(s) && s.length === ITEMS.length) checked = s.map(v => v === true);
+ }catch(e){}
+}
+function saveState(){
+ try{ localStorage.setItem(KEY, JSON.stringify(checked)); }catch(e){}
+}
+
+/* Build checklist cards using DOM methods (no innerHTML) */
+function buildChecklist(){
+ const box = $("checklist");
+ ITEMS.forEach((it, i) => {
+  const label = document.createElement("label");
+  label.className = "item";
+  label.id = "item" + i;
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.addEventListener("change", () => { checked[i] = input.checked; saveState(); render(); });
+  const mark = document.createElement("span"); mark.className = "box"; mark.textContent = "✓"; mark.setAttribute("aria-hidden","true");
+  const txt = document.createElement("div");
+  const h = document.createElement("h3"); h.textContent = it[0];
+  const p = document.createElement("p"); p.textContent = it[1];
+  txt.append(h, p);
+  label.append(input, mark, txt);
+  box.append(label);
+ });
+}
+
+/* Update cards, ring, counters, message and missing list */
+function render(){
+ const total = ITEMS.length;
+ const done = checked.filter(Boolean).length;
+ const pct = Math.round(done / total * 100);
+ ITEMS.forEach((_, i) => {
+  const card = $("item" + i);
+  card.classList.toggle("done", checked[i]);
+  card.querySelector("input").checked = checked[i];
+ });
+ $("pct").textContent = pct + "%";
+ $("doneN").textContent = done;
+ $("leftN").textContent = total - done;
+ $("ringFg").style.strokeDashoffset = 553 - 553 * pct / 100;
+ $("ringBox").setAttribute("aria-label", "Тексеру барысы: " + pct + " пайыз");
+ $("msg").textContent = pct === 100
+  ? "Барлық тармақ белгіленді. Шарттың мазмұнын және заң талаптарына сәйкестігін қайта тексеріңіз."
+  : pct >= 50
+   ? "Тексеруді жалғастырыңыз. Кейбір маңызды тармақтар әлі қаралмаған."
+   : "Тексерілмеген тармақтар көп. Шартты мұқият қарап шығыңыз.";
+ const ul = $("missing");
+ ul.replaceChildren();
+ const rest = ITEMS.filter((_, i) => !checked[i]);
+ if(!rest.length){ const li = document.createElement("li"); li.textContent = "Барлық тармақ белгіленді."; ul.append(li); }
+ rest.forEach(it => { const li = document.createElement("li"); li.textContent = it[0]; ul.append(li); });
+}
+
+$("clearBtn").addEventListener("click", () => { checked.fill(false); saveState(); render(); });
+
+/* ---------- Tour cost calculator ---------- */
+const FIELDS = ["f_tour","f_ins","f_visa","f_add","f_other"];
+const fmt = n => new Intl.NumberFormat("ru-RU",{maximumFractionDigits:2}).format(n) + " ₸";
+
+/* Validate one field: empty = 0, must be a finite number >= 0 */
+function readField(id){
+ const el = $(id), err = $("e_" + id), raw = el.value.trim();
+ el.classList.remove("invalid"); err.textContent = "";
+ if(raw === "") return 0;
+ const v = Number(raw);
+ if(!isFinite(v) || v < 0){
+  el.classList.add("invalid");
+  err.textContent = "Теріс емес сан енгізіңіз.";
+  return null;
+ }
+ return v;
+}
+$("costForm").addEventListener("submit", e => {
+ e.preventDefault();
+ const vals = FIELDS.map(readField);
+ const res = $("result");
+ if(vals.includes(null)){
+  $("costErr").textContent = "Өрістерде қате бар. Түзетіп, қайта көріңіз.";
+  res.classList.remove("show");
+  return;
+ }
+ if(vals.every(v => v === 0)){
+  $("costErr").textContent = "Кемінде бір соманы енгізіңіз.";
+  res.classList.remove("show");
+  return;
+ }
+ $("costErr").textContent = "";
+ const extra = vals[1] + vals[2] + vals[3] + vals[4];
+ $("r_base").textContent = fmt(vals[0]);
+ $("r_extra").textContent = fmt(extra);
+ $("r_total").textContent = "Жалпы құны: " + fmt(vals[0] + extra);
+ res.classList.add("show");
+});
+$("costReset").addEventListener("click", () => {
+ FIELDS.forEach(id => { $(id).value = ""; $(id).classList.remove("invalid"); $("e_" + id).textContent = ""; });
+ $("costErr").textContent = "";
+ $("result").classList.remove("show");
+});
+
+/* ---------- FAQ accordion ---------- */
+function buildFaq(){
+ FAQS.forEach((f, i) => {
+  const wrap = document.createElement("div"); wrap.className = "q reveal";
+  const btn = document.createElement("button");
+  btn.type = "button"; btn.id = "qb" + i; btn.setAttribute("aria-expanded","false"); btn.setAttribute("aria-controls","qa" + i);
+  btn.textContent = f[0];
+  const ans = document.createElement("div"); ans.className = "ans"; ans.id = "qa" + i;
+  ans.setAttribute("role","region"); ans.setAttribute("aria-labelledby","qb" + i);
+  const p = document.createElement("p"); p.textContent = f[1]; ans.append(p);
+  btn.addEventListener("click", () => {
+   const open = btn.getAttribute("aria-expanded") === "true";
+   btn.setAttribute("aria-expanded", String(!open));
+   ans.style.maxHeight = open ? "0" : ans.scrollHeight + "px";
+  });
+  wrap.append(btn, ans);
+  $("faq").append(wrap);
+ });
+}
+
+/* ---------- Mobile menu, active link, back-to-top ---------- */
+const nav = $("nav"), burger = $("burger");
+function closeMenu(){ nav.classList.remove("open"); burger.setAttribute("aria-expanded","false"); }
+burger.addEventListener("click", () => {
+ const open = nav.classList.toggle("open");
+ burger.setAttribute("aria-expanded", String(open));
+});
+nav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeMenu(); });
+
+const topBtn = $("top");
+topBtn.addEventListener("click", () => window.scrollTo({top:0, behavior:"smooth"}));
+const links = [...nav.querySelectorAll("a")];
+const secs = ["home","journey","check","calc","risks","report","law"].map(id => $(id));
+window.addEventListener("scroll", () => {
+ topBtn.classList.toggle("show", window.scrollY > 500);
+ let cur = secs[0];
+ secs.forEach(s => { if(s.getBoundingClientRect().top < 140) cur = s; });
+ links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + cur.id));
+}, {passive:true});
+
+/* ---------- Scroll reveal ---------- */
+function initReveal(){
+ const els = document.querySelectorAll(".reveal");
+ if(!("IntersectionObserver" in window)){ els.forEach(e => e.classList.add("in")); return; }
+ const io = new IntersectionObserver(en => en.forEach(x => { if(x.isIntersecting){ x.target.classList.add("in"); io.unobserve(x.target); } }), {threshold:.12});
+ els.forEach(e => io.observe(e));
+}
+
+/* ---------- Risk self-assessment and report ---------- */
+const RISKS = [
+ ["Қосымша төлемдер түсініксіз", "Қызметтердің толық бағасын, валюта мен қосымша төлемдердің жазбаша тізімін сұраңыз."],
+ ["Ақшаны қайтару шарттары анық емес", "Бас тарту, мерзімдер және қайтарылатын соманы шарттан тауып, түсіндірмені жазбаша алыңыз."],
+ ["Қонақүй немесе сапар бағдарламасы нақты көрсетілмеген", "Қонақүй, орналастыру, маршрут және күндерді шартта нақтылауды сұраңыз."],
+ ["Компания деректері сәйкес келмейді", "Компания атауы мен тіркеу деректерін ресми дереккөздер арқылы қайта салыстырыңыз."],
+ ["Сақтандыру туралы ақпарат жеткіліксіз", "Сақтандырудың қамтуы, мерзімі, шектеулері мен байланыс деректерін нақтылаңыз."],
+ ["Шағым беру тәртібі көрсетілмеген", "Шағым жіберу мекенжайы мен байланыс арналарын жазбаша нақтылаңыз."]
+];
+const riskState = Array(RISKS.length).fill(false);
+try {const saved=JSON.parse(localStorage.getItem("tourcheck_risks_v1"));if(Array.isArray(saved)&&saved.length===RISKS.length)saved.forEach((v,i)=>riskState[i]=v===true);}catch(e){}
+RISKS.forEach((risk,i)=>{
+ const label=document.createElement("label");label.className="risk-option";
+ const input=document.createElement("input");input.type="checkbox";input.checked=riskState[i];
+ input.addEventListener("change",()=>{riskState[i]=input.checked;try{localStorage.setItem("tourcheck_risks_v1",JSON.stringify(riskState));}catch(e){}updateReport();});
+ const span=document.createElement("span");span.textContent=risk[0];label.append(input,span);$("riskOptions").append(label);
+});
+function updateRisks(){
+ const box=$("riskOutput");box.replaceChildren();
+ const selected=RISKS.filter((_,i)=>riskState[i]);
+ const p=document.createElement("p");p.className="msg";p.textContent=selected.length?"Назар аударуды қажет ететін мәселелер: "+selected.length:"Белгіленген мәселе жоқ. Бұл шарттың заңдылығын растамайды.";box.append(p);
+ if(selected.length){const ul=document.createElement("ul");selected.forEach(r=>{const li=document.createElement("li");const strong=document.createElement("strong");strong.textContent=r[0]+": ";li.append(strong,document.createTextNode(r[1]));ul.append(li);});box.append(ul);}
+}
+function reportText(){
+ const done=checked.filter(Boolean).length;
+ const lines=["TOURCHECK KZ — ШАРТТЫ ТЕКСЕРУ ЕСЕБІ","Күні: "+new Date().toLocaleDateString("kk-KZ"),"Тексерілген тармақтар: "+done+" / "+ITEMS.length,"","ЧЕК-ЛИСТ:"];
+ ITEMS.forEach((item,i)=>lines.push((checked[i]?"[✓] ":"[ ] ")+item[0]));
+ lines.push("","НАЗАР АУДАРУДЫ ҚАЖЕТ ЕТЕТІН МӘСЕЛЕЛЕР:");
+ let any=false;RISKS.forEach((r,i)=>{if(riskState[i]){any=true;lines.push("• "+r[0]+" — "+r[1]);}});
+ if(!any)lines.push("Белгіленген мәселе жоқ.");
+ lines.push("","Ескерту: Бұл есеп тек ақпараттық мақсатта жасалған. Белгілер шарттың заңдылығын немесе қауіпсіздігін растамайды. Заңның қолданыстағы редакциясын adilet.zan.kz сайтынан тексеріңіз.");
+ return lines.join("\n");
+}
+function updateReport(){$("reportPreview").textContent=reportText();}
+$("riskReview").addEventListener("click",()=>{updateRisks();updateReport();});
+$("riskClear").addEventListener("click",()=>{riskState.fill(false);document.querySelectorAll("#riskOptions input").forEach(x=>x.checked=false);try{localStorage.setItem("tourcheck_risks_v1",JSON.stringify(riskState));}catch(e){}updateRisks();updateReport();});
+$("downloadReport").addEventListener("click",()=>{const blob=new Blob(["\uFEFF"+reportText()],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="TourCheck_KZ_esep.txt";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$("printReport").addEventListener("click",()=>{updateReport();window.print();});
+const originalRender=render;
+render=function(){originalRender();updateReport();};
+updateRisks();
+/* ---------- Init ---------- */
+loadState();
+buildChecklist();
+buildFaq();
+render();
+initReveal();
+</script>
+<script>
+/* Premium theme and reading progress — independent of original site logic */
+(function(){
+ const root=document.documentElement,btn=document.getElementById('themeToggle'),progress=document.getElementById('scrollProgress');
+ let saved='light';try{saved=localStorage.getItem('tourcheck-theme')||'light'}catch(e){}
+ function apply(mode){root.dataset.theme=mode;btn.textContent=mode==='dark'?'☀ Күндізгі режим':'☾ Түнгі режим';btn.setAttribute('aria-pressed',String(mode==='dark'))}
+ apply(saved==='dark'?'dark':'light');
+ btn.addEventListener('click',()=>{const mode=root.dataset.theme==='dark'?'light':'dark';apply(mode);try{localStorage.setItem('tourcheck-theme',mode)}catch(e){}});
+ function update(){const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max>0?Math.min(100,scrollY/max*100):0)+'%'}
+ addEventListener('scroll',update,{passive:true});addEventListener('resize',update);update();
+})();
+</script>
+<script>
+/* Three-language site translation: original Kazakh text is the source of truth. */
+(function(){
+const translations = {"«Турагенттік ешқандай жағдайда жауап бермейді.»": ["«Турагентство ни при каких обстоятельствах не несёт ответственности.»", "“The agency is not liable under any circumstances.”"], "Жауапкершіліктен толық босату тұтынушының құқықтарын шектеуі мүмкін. Бұл тармақты түсіндіруді немесе өзгертуді сұраңыз және заң мәтінімен салыстырыңыз.": ["Полное освобождение от ответственности может ограничивать права потребителя. Попросите разъяснить или изменить этот пункт и сверьте его с текстом закона.", "A blanket exclusion of liability may restrict consumer rights. Ask for this clause to be explained or changed, and compare it with the text of the law."], "«Қажет болса, қосымша төлемдер бөлек есептеледі.»": ["«При необходимости дополнительные платежи рассчитываются отдельно.»", "“Additional charges are calculated separately if needed.”"], "Қосымша төлемдердің түрі мен мөлшері көрсетілмесе, түпкілікті баға белгісіз болады. Тізімді және сомаларды жазбаша сұраңыз.": ["Если не указаны вид и размер доплат, итоговая цена остаётся неизвестной. Запросите список и суммы письменно.", "If the type and amount of extra charges are not stated, the final price stays unknown. Ask for the list and amounts in writing."], "«Төленген ақша ешқандай жағдайда қайтарылмайды.»": ["«Оплаченные деньги ни при каких условиях не возвращаются.»", "“Paid funds are non-refundable in any case.”"], "Ақшаны қайтару шарттары шартқа және заңға байланысты, сондықтан тым қатаң тұжырымды нақтылаған жөн. Нақты ережелерді қолданыстағы заңнамадан тексеріңіз.": ["Условия возврата зависят от договора и закона, поэтому слишком категоричную формулировку стоит уточнить. Проверьте точные правила в действующем законодательстве.", "Refund terms depend on the contract and the law, so an absolute wording is worth clarifying. Check the exact rules in the current legislation."], "«Қонақүй алдын ала хабарламай ауыстырылуы мүмкін.»": ["«Отель может быть заменён без предварительного уведомления.»", "“The hotel may be replaced without prior notice.”"], "Қонақүй — шарттың маңызды бөлігі. Ауыстыру қандай жағдайда, қандай деңгейге және қалай ескертіліп жасалатынын жазбаша нақтылаңыз.": ["Отель — важная часть договора. Уточните письменно, в каких случаях, на какой уровень и с каким уведомлением возможна замена.", "The hotel is a key part of the contract. Clarify in writing when it can be replaced, to what standard and with what notice."], "Шарттағы «қызыл жалаулар»": ["«Красные флаги» в договоре", "Red flags in a contract"], "Төменде — оқу мақсатында ойдан құрастырылған шарт тармақтары. Әрқайсысын басып, неге мұқият болу керегін қараңыз.": ["Ниже — вымышленные пункты договора в учебных целях. Нажмите на каждый, чтобы увидеть, почему на него стоит обратить внимание.", "Below are fictional contract clauses for learning purposes. Tap each one to see why it deserves a closer look."], "Үлгі": ["Пример", "Example"], "Неге бұл қауіпті?": ["Почему это рискованно?", "Why is it risky?"], "Бұл мысалдар оқу мақсатында ойдан құрастырылған және жеке заңгерлік кеңес болып табылмайды.": ["Эти примеры вымышлены в учебных целях и не являются юридической консультацией.", "These examples are fictional, for learning purposes, and are not legal advice."], "Білімді тексеру тесті": ["Тест на проверку знаний", "Knowledge quiz"], "5 қысқа сұраққа жауап беріп, шартты тексеру ережелерін бекітіңіз.": ["Ответьте на 5 коротких вопросов, чтобы закрепить правила проверки договора.", "Answer 5 short questions to reinforce the contract-checking rules."], "Сұрақ": ["Вопрос", "Question"], "Келесі сұрақ →": ["Следующий вопрос →", "Next question →"], "Нәтижені көрсету": ["Показать результат", "Show result"], "Дұрыс!": ["Верно!", "Correct!"], "Қате.": ["Неверно.", "Not quite."], "Қайта өту": ["Пройти ещё раз", "Try again"], "Тест нәтижесі": ["Результат теста", "Quiz result"], "Тамаша! Сіз шартты тексеру ережелерін жақсы білесіз.": ["Отлично! Вы хорошо знаете правила проверки договора.", "Excellent! You know the contract-checking rules well."], "Жақсы нәтиже. Кейбір тақырыптарды қайталап шығыңыз.": ["Хороший результат. Стоит повторить некоторые темы.", "Good result. Some topics are worth reviewing again."], "Тақырыпты қайта қарап шығыңыз: чек-листтен бастаңыз.": ["Рекомендуем повторить тему: начните с чек-листа.", "Review the topic again: start with the checklist."], "Турагент: «Бәрін ауызша келістік, шартқа жазудың қажеті жоқ» дейді. Не істейсіз?": ["Турагент говорит: «Мы всё обсудили устно, в договор писать не нужно». Что вы сделаете?", "The agent says: “We agreed everything verbally, no need to put it in the contract.” What do you do?"], "Сенемін де, қол қоямын": ["Поверю и подпишу", "Trust them and sign"], "Келісілген талаптарды шартқа жазуды сұраймын": ["Попрошу записать договорённости в договор", "Ask for the agreed terms to be written into the contract"], "Тек мессенджердегі хабарламаға сенемін": ["Положусь только на сообщения в мессенджере", "Rely only on messenger chats"], "Ауызша уәделер шартта көрсетілуі тиіс — бұл тексерудің басты ережесі.": ["Устные обещания должны быть отражены в договоре — это главное правило проверки.", "Verbal promises should appear in the contract — this is the core rule of checking."], "Туристік қызмет көрсету шарты қандай түрде жасалады?": ["В какой форме заключается договор на туристские услуги?", "In what form is a tourism services contract made?"], "Тек ауызша": ["Только устно", "Verbally only"], "Жазбаша (гид және экскурсия жүргізушімен жасалатын шарттарды қоспағанда)": ["В письменной (кроме договоров с гидом и экскурсоводом)", "In writing (except contracts with a guide or tour leader)"], "Кез келген түрде, форманың маңызы жоқ": ["В любой форме, это не важно", "Any form, it does not matter"], "Заңның 17-бабы бойынша шарт жазбаша жасалады (гид және экскурсия жүргізушімен жасалатын шарттардан басқасы).": ["По статье 17 Закона договор заключается письменно (кроме договоров с гидом и экскурсоводом).", "Under Article 17 of the Law the contract is made in writing (except contracts with a guide or tour leader)."], "Тур бағасы туралы қайсысы дұрыс?": ["Что верно в отношении цены тура?", "What is correct about the tour price?"], "Баға туралы ауызша келісім жеткілікті": ["Достаточно устной договорённости о цене", "A verbal agreement on price is enough"], "Бағаға не кіретіні мен не кірмейтіні жазбаша нақты көрсетілуі керек": ["В договоре письменно должно быть ясно, что входит и не входит в цену", "The contract must clearly state in writing what the price includes and excludes"], "Қосымша төлемдер туралы сапар кезінде ғана сұраған дұрыс": ["Про доплаты лучше спрашивать только в поездке", "Ask about extra charges only during the trip"], "Қосымша төлемдер мен баға құрамы алдын ала нақтыланбаса, түпкілікті құн күтпеген жерден өсуі мүмкін.": ["Если доплаты и состав цены не уточнены заранее, итоговая стоимость может неожиданно вырасти.", "If extra charges and what the price covers are not clarified in advance, the final cost may rise unexpectedly."], "Чек-листтегі барлық 12 тармақ белгіленді. Бұл нені білдіреді?": ["Все 12 пунктов чек-листа отмечены. Что это значит?", "All 12 checklist items are ticked. What does it mean?"], "Шарт міндетті түрде заңды": ["Договор точно законный", "The contract is definitely legal"], "Тармақтарды қарап шықтыңыз, бірақ бұл заңдылыққа кепілдік емес": ["Вы просмотрели пункты, но это не гарантия законности", "You reviewed the items, but it is not a guarantee of legality"], "Енді ешқандай тексеру қажет емес": ["Больше проверять ничего не нужно", "No further checking is needed"], "Пайыз тек белгіленген тармақтар санын көрсетеді. Күмәнді жағдайда нақты шартты жеке қарау қажет.": ["Процент показывает лишь число отмеченных пунктов. В сомнительных случаях договор нужно рассматривать отдельно.", "The percentage only shows how many items are ticked. In doubtful cases the contract itself needs individual review."], "Төлем құжаттары мен шарттың көшірмесін не істейсіз?": ["Что делать с платёжными документами и копией договора?", "What should you do with payment documents and the contract copy?"], "Сақтаймын — дау туындаса, олар дәлел болады": ["Сохраню — при споре они станут доказательствами", "Keep them — they are evidence if a dispute arises"], "Сапардан кейін тастаймын": ["Выброшу после поездки", "Throw them away after the trip"], "Тек турагенттікте қалсын": ["Пусть остаются только у агентства", "Leave them only with the agency"], "Төлем құжаттары мен шарттың көшірмесі дау туындаған жағдайда құқықтарыңызды растауға көмектеседі.": ["Платёжные документы и копия договора помогут подтвердить ваши права в случае спора.", "Payment documents and a copy of the contract help confirm your rights in a dispute."], "Құқық бұзылса: 4 қадам": ["Если права нарушены: 4 шага", "If your rights are violated: 4 steps"], "Жалпы бағдар: нақты рәсім мен мерзімдер жағдайға және қолданыстағы заңнамаға байланысты.": ["Общая ориентация: точная процедура и сроки зависят от ситуации и действующего законодательства.", "General guidance: the exact procedure and deadlines depend on the situation and current legislation."], "Дәлелдерді жинаңыз": ["Соберите доказательства", "Collect evidence"], "Шартты, төлем құжаттарын, хат-хабарлар мен суреттерді сақтаңыз.": ["Сохраните договор, платёжные документы, переписку и фотографии.", "Keep the contract, payment documents, messages and photos."], "Жазбаша шағым жазыңыз": ["Напишите письменную претензию", "Write a formal complaint"], "Мәселені, талабыңызды және мерзімді нақты көрсетіңіз; өтініштің көшірмесін сақтаңыз.": ["Чётко укажите проблему, требование и срок; сохраните копию обращения.", "State the problem, your demand and a deadline clearly; keep a copy of the complaint."], "Жауап күтіңіз": ["Дождитесь ответа", "Wait for a reply"], "Компанияның жауабын жазбаша түрде алуға тырысыңыз.": ["Старайтесь получить ответ компании в письменном виде.", "Try to get the company’s answer in writing."], "Құзыретті органға немесе сотқа жүгініңіз": ["Обратитесь в компетентный орган или суд", "Turn to the competent authority or court"], "Мәселе шешілмесе, нақты рәсім мен мерзімдерді қолданыстағы заңнамадан тексеріңіз.": ["Если вопрос не решён, проверьте точную процедуру и сроки в действующем законодательстве.", "If unresolved, check the exact procedure and deadlines in current legislation."], "Қысқаша сөздік": ["Краткий словарь", "Short glossary"], "Туроператор": ["Туроператор", "Tour operator"], "Туристік өнімді қалыптастыратын компания.": ["Компания, формирующая туристский продукт.", "A company that creates the tour product."], "Турагент": ["Турагент", "Travel agent"], "Туристік өнімді агенттік шарт негізінде ұсынатын және өткізетін тұлға.": ["Лицо, которое предлагает и реализует туристский продукт на основании агентского договора.", "A party that offers and sells the tour product under an agency agreement."], "Турист": ["Турист", "Tourist"], "Туристік қызметті пайдаланатын адам.": ["Человек, пользующийся туристской услугой.", "A person using a tourism service."], "Шағым": ["Претензия", "Complaint"], "Компанияға жолданатын жазбаша талап.": ["Письменное требование, направляемое компании.", "A written demand sent to the company."], "Төлем құжаттары": ["Платёжные документы", "Payment documents"], "Төлемді растайтын чек, квитанция және басқа құжаттар.": ["Чеки, квитанции и другие документы, подтверждающие оплату.", "Receipts and other documents confirming payment."], "Жоба туралы": ["О проекте", "About"], "Мақсаты": ["Цель", "Purpose"], "Туристік шартқа қол қоймас бұрын нені тексеру керегін қарапайым тілмен түсіндіру.": ["Простым языком объяснить, что проверить перед подписанием туристического договора.", "To explain in plain language what to check before signing a travel contract."], "Кімге арналған": ["Для кого", "Audience"], "Саяхатқа шығатын және турагенттікпен шарт жасасатын адамдарға.": ["Для тех, кто собирается в поездку и заключает договор с турагентством.", "For people planning a trip and signing a contract with a travel agency."], "Шектеулер": ["Ограничения", "Limitations"], "Сайт — оқу жобасы, жеке заңгерлік кеңес емес. Заң мәтінінің ресми дереккөзі — «Әділет».": ["Сайт — учебный проект, а не юридическая консультация. Официальный источник текста закона — «Әділет».", "The site is a learning project, not legal advice. The official source of the law is “Adilet”."], "Дереккөздер": ["Источники", "Sources"], "«Қазақстан Республикасындағы туристік қызмет туралы» Заң": ["Закон «О туристской деятельности в Республике Казахстан»", "Law “On Tourism Activities in the Republic of Kazakhstan”"], "«Тұтынушылардың құқықтарын қорғау туралы» Заң": ["Закон «О защите прав потребителей»", "Law “On Protection of Consumer Rights”"], "Жасанды интеллект": ["Искусственный интеллект", "Artificial intelligence"], "ЖИ мәтін, код және суреттер жасауға көмектесті. ЖИ дайындаған құқықтық мазмұн ресми дереккөздермен салыстырылып тексерілуі тиіс.": ["ИИ помогал создавать тексты, код и иллюстрации. Правовой контент, подготовленный ИИ, необходимо сверять с официальными источниками.", "AI helped create text, code and illustrations. Legal content prepared by AI must be checked against official sources."], "Қызыл жалаулар": ["Красные флаги", "Red flags"], "Тест": ["Тест", "Quiz"], "Шағым (претензия) дегеніміз не?": ["Что такое претензия?", "What is a complaint (claim)?"], "Бұл — компанияға жолданатын жазбаша талап. Мәселені, талабыңызды және мерзімді нақты көрсетіп, өтініштің көшірмесін сақтаңыз.": ["Это письменное требование, направляемое компании. Чётко укажите проблему, требование и срок и сохраните копию обращения.", "It is a written demand sent to the company. State the problem, your demand and a deadline clearly, and keep a copy."], "Басты бет": ["Главная", "Home"], "Шартты тексеру": ["Проверка договора", "Contract checklist"], "Калькулятор": ["Калькулятор", "Calculator"], "Тәуекелдер": ["Риски", "Risks"], "Есеп": ["Отчёт", "Report"], "Заң және FAQ": ["Закон и вопросы", "Law & FAQ"], "Туристік шартқа қол қояр алдында нені тексеру керек?": ["Что проверить перед подписанием туристического договора?", "What should you check before signing a travel contract?"], "Саяхатқа шықпас бұрын туристік шарттың маңызды талаптарын тексеріп, өз құқықтарыңыз туралы ақпарат алыңыз.": ["Перед поездкой проверьте важные условия туристического договора и узнайте о своих правах.", "Before your trip, check the key terms of your travel contract and learn about your rights."], "Тексеруді бастау": ["Начать проверку", "Start checking"], "Заң туралы білу": ["Узнать о законе", "Learn about the law"], "✦ Құқықтық ақпарат": ["✦ Правовая информация", "✦ Legal information"], "✓ 12 тармақ": ["✓ 12 пунктов", "✓ 12 items"], "◈ Қазақстан заңнамасы": ["◈ Законодательство Казахстана", "◈ Kazakhstan law"], "Саяхатқа дайындық / Подготовка к путешествию / Travel preparation": ["Подготовка к путешествию", "Travel preparation"], "Шартты тексеру — қауіпсіз әрі жайлы саяхатқа алғашқы қадам.": ["Проверка договора — первый шаг к безопасному и комфортному путешествию.", "Checking your contract is the first step toward a safe and comfortable trip."], "Маршрут / Маршрут / Itinerary": ["Маршрут", "Itinerary"], "Саяхат / Путешествие / Travel": ["Путешествие", "Travel"], "Демалыс / Отдых / Holiday": ["Отдых", "Holiday"], "Шартты оқып отырып, әр тармақты тексеріп, белгілеңіз. Белгілеріңіз осы құрылғыда сақталады, жеке деректер сұралмайды.": ["Читайте договор, проверяйте и отмечайте каждый пункт. Отметки сохраняются на устройстве, персональные данные не запрашиваются.", "Read your contract, check and tick each item. Your selections are saved on this device; no personal data is requested."], "Қалай пайдалану керек: шартты ашып, әр тармақты салыстырыңыз; нақты тексерілген тармақтарды белгілеңіз; күмәнді шарттарды «Тәуекелдер» бөлімінде таңдаңыз; соңында есепті сақтаңыз.": ["Как пользоваться: откройте договор, проверьте каждый пункт, отметьте проверенные условия, укажите сомнения в разделе «Риски» и сохраните отчёт.", "How to use: open the contract, review each item, tick what you have verified, flag concerns in “Risks”, then save your report."], "Барлығын тазалау": ["Сбросить всё", "Clear all"], "Нәтижені көру": ["Посмотреть результат", "View result"], "Шартты тексеру калькуляторы": ["Калькулятор проверки договора", "Contract checklist calculator"], "Белгіленген тармақтар санына қарай тексеру барысын көрсетеді.": ["Показывает ход проверки по количеству отмеченных пунктов.", "Shows progress based on the number of checked items."], "тексерілді": ["проверено", "checked"], "Тексерілген тармақ": ["Проверено пунктов", "Items checked"], "Қалған тармақ": ["Осталось пунктов", "Items remaining"], "Тексерілмеген тармақтар:": ["Непроверенные пункты:", "Unchecked items:"], "Назар аударыңыз: пайыз тек белгіленген тармақтар санын көрсетеді. Ол шарттың заңдылығын немесе қауіпсіздігін кепілдемейді.": ["Внимание: процент показывает только число отмеченных пунктов и не гарантирует законность или безопасность договора.", "Note: the percentage only reflects checked items. It does not guarantee that the contract is legal or safe."], "Турдың жалпы құнын есептеу": ["Расчёт полной стоимости тура", "Calculate total tour cost"], "Сомаларды теңгемен енгізіңіз. Бұл тек шамамен есептеу, ол турфирманың заңды міндеттемелерін анықтамайды.": ["Введите суммы в тенге. Это приблизительный расчёт, не определяющий юридические обязательства турфирмы.", "Enter amounts in tenge. This is an estimate, not a determination of the travel company’s legal obligations."], "Турдың негізгі бағасы (₸)": ["Основная цена тура (₸)", "Base tour price (₸)"], "Сақтандыру құны (₸)": ["Стоимость страховки (₸)", "Insurance cost (₸)"], "Виза шығындары (₸)": ["Расходы на визу (₸)", "Visa expenses (₸)"], "Қосымша қызметтер (₸)": ["Дополнительные услуги (₸)", "Additional services (₸)"], "Басқа шығындар (₸)": ["Прочие расходы (₸)", "Other expenses (₸)"], "Жалпы соманы есептеу": ["Рассчитать сумму", "Calculate total"], "Тазалау": ["Очистить", "Clear"], "Турдың негізгі құны": ["Основная стоимость тура", "Base tour cost"], "Қосымша шығындар сомасы": ["Дополнительные расходы", "Additional expenses"], "Шарттағы ықтимал тәуекелдер": ["Возможные риски в договоре", "Potential contract risks"], "Шарттан байқаған мәселелерді таңдаңыз. Бұл автоматты заңдық қорытынды емес, мұқият тексеруге арналған ұсыныстар.": ["Выберите замеченные проблемы. Это рекомендации для проверки, а не автоматическое юридическое заключение.", "Select any issues you notice. These are review suggestions, not an automated legal opinion."], "Ұсыныстарды көрсету": ["Показать рекомендации", "Show recommendations"], "Таңдауды тазалау": ["Сбросить выбор", "Clear selection"], "Тексеру нәтижесін сақтау": ["Сохранить результаты проверки", "Save check results"], "Чек-лист пен ықтимал тәуекелдер бойынша қысқаша есепті жүктеп алыңыз немесе басып шығарыңыз. Деректер тек осы браузерде өңделеді.": ["Скачайте или распечатайте краткий отчёт по чек-листу и рискам. Данные обрабатываются только в этом браузере.", "Download or print a summary of the checklist and risks. Data is processed only in this browser."], "Есепті жүктеу (.txt)": ["Скачать отчёт (.txt)", "Download report (.txt)"], "Басып шығару / PDF": ["Печать / PDF", "Print / PDF"], "Заң туралы": ["О законодательстве", "About the law"], "Төменде негізгі құқықтық ережелер қысқаша берілген. Бап атауын басып, «Әділет» порталындағы заң мәтінін қараңыз. Егер сілтеме қажетті бапқа бірден апармаса, ашылған құжаттан бап нөмірін іздеңіз.": ["Ниже кратко изложены основные нормы. Нажмите на ссылку статьи для просмотра закона на портале «Әділет». Если нужная статья не открылась сразу, найдите её номер в документе.", "Below is a brief overview of key legal provisions. Follow the article link to the Adilet legal portal. If it does not jump to the article, search its number within the document."], "Туристік қызмет көрсету шарты": ["Договор на туристические услуги", "Travel services contract"], "Туристік қызмет көрсету шартының талаптарын, қызмет құрамын және тараптардың міндеттерін мұқият оқыңыз. Шартты жазбаша рәсімдеу тәртібі заңда белгіленген.": ["Внимательно изучите условия туристического договора, перечень услуг и обязанности сторон. Закон определяет порядок письменного оформления.", "Carefully review the travel contract terms, included services and the parties’ obligations. The law establishes requirements for written contracts."], "↗ Туристік қызмет туралы заң — 17-бап": ["↗ Закон о туристской деятельности — статья 17", "↗ Tourism Law — Article 17"], "Тұтынушының құқықтары": ["Права потребителя", "Consumer rights"], "Турист қызмет пен оның бағасы туралы ақпарат алуға, сапалы қызметті талап етуге және өз құқықтарын қорғауға құқылы.": ["Турист вправе получать информацию об услугах и ценах, требовать качественного обслуживания и защищать свои права.", "Tourists have the right to information about services and prices, to demand quality services and to protect their rights."], "↗ Тұтынушылардың құқықтарын қорғау туралы заң — 7-бап": ["↗ Закон о защите прав потребителей — статья 7", "↗ Consumer Protection Law — Article 7"], "Құқықты шектейтін шарт талаптары": ["Условия, ограничивающие права", "Contract terms restricting rights"], "Шартта тұтынушының заңмен қорғалатын құқықтарын негізсіз шектейтін талаптар болса, оларға ерекше назар аударыңыз.": ["Обратите внимание на условия, необоснованно ограничивающие законные права потребителя.", "Pay attention to any terms that unjustifiably restrict consumers’ statutory rights."], "↗ Тұтынушылардың құқықтарын қорғау туралы заң — 8-1-бап": ["↗ Закон о защите прав потребителей — статья 8-1", "↗ Consumer Protection Law — Article 8-1"], "Турдан бас тарту және ақшаны қайтару": ["Отмена тура и возврат денег", "Tour cancellation and refunds"], "Қайтарылатын ақша сомасы бас тарту себебіне, шартқа және қолданылатын заң нормаларына байланысты. Төлем құжаттарын сақтап, компаниядан жазбаша есеп сұраңыз.": ["Сумма возврата зависит от причины отказа, договора и применимого законодательства. Сохраните платёжные документы и запросите письменный расчёт.", "The refund depends on the cancellation reason, contract and applicable law. Keep payment records and request a written calculation."], "Ескерту:": ["Примечание:", "Note:"], "Бұл ақпарат оқу-ағарту мақсатында берілген, жеке заңгерлік қорытынды емес. Чек-лист нәтижесі шарттың заңдылығын автоматты түрде анықтамайды. Нақты дау туындаса, шарттың мәтіні мен заңның қолданыстағы редакциясы жеке қаралуы тиіс.": ["Информация предоставлена в образовательных целях и не является индивидуальным юридическим заключением. Чек-лист не устанавливает законность договора. При споре следует отдельно изучить договор и действующее законодательство.", "This information is educational, not individual legal advice. Checklist results do not establish a contract’s legality. In a dispute, review the contract and current law separately."], "Жиі қойылатын сұрақтар": ["Частые вопросы", "Frequently asked questions"], "TourCheck KZ - оқу мақсатында жасалған ақпараттық веб-жоба.": ["TourCheck KZ — информационный учебный веб-проект.", "TourCheck KZ — an educational information website."], "Жобаны әзірлеуде ChatGPT жасанды интеллекті пайдаланылды.": ["При разработке проекта использован искусственный интеллект ChatGPT.", "This project was developed with the help of ChatGPT AI."], "Негізгі дереккөз: Қазақстан Республикасындағы туристік қызмет туралы ҚР Заңы.": ["Основной источник: Закон РК «О туристской деятельности в Республике Казахстан».", "Main source: Law of Kazakhstan “On Tourist Activities in the Republic of Kazakhstan”."], "Автор / Автор / Author: Әдия Асқарова / Адия Аскарова / Adiya Askarova": ["Автор: Адия Аскарова", "Author: Adiya Askarova"], "Қазақша: Жоба ChatGPT жасанды интеллектінің көмегімен әзірленді.": ["Проект разработан с помощью искусственного интеллекта ChatGPT.", "This project was developed with the assistance of ChatGPT artificial intelligence."], "Бұл сайттағы ақпарат жалпы таныстыру мақсатында берілген және жеке заңгерлік кеңес болып табылмайды.": ["Информация на сайте носит общий характер и не является индивидуальной юридической консультацией.", "The information on this website is general and does not constitute individual legal advice."], "☾ Түнгі режим": ["☾ Тёмная тема", "☾ Dark mode"], "☀ Күндізгі режим": ["☀ Светлая тема", "☀ Light mode"], "Барлық тармақ белгіленді. Шарттың мазмұнын және заң талаптарына сәйкестігін қайта тексеріңіз.": ["Все пункты отмечены. Ещё раз проверьте договор на соответствие закону.", "All items checked. Review the contract again for compliance with the law."], "Тексеруді жалғастырыңыз. Кейбір маңызды тармақтар әлі қаралмаған.": ["Продолжайте проверку: некоторые важные пункты ещё не изучены.", "Continue checking: some important items remain."], "Тексерілмеген тармақтар көп. Шартты мұқият қарап шығыңыз.": ["Много непроверенных пунктов. Внимательно изучите договор.", "Many items remain unchecked. Review the contract carefully."], "Барлық тармақ белгіленді.": ["Все пункты отмечены.", "All items checked."], "Теріс емес сан енгізіңіз.": ["Введите неотрицательное число.", "Enter a non-negative number."], "Өрістерде қате бар. Түзетіп, қайта көріңіз.": ["В полях есть ошибки. Исправьте их и повторите.", "Some fields contain errors. Correct them and try again."], "Кемінде бір соманы енгізіңіз.": ["Введите хотя бы одну сумму.", "Enter at least one amount."], "Жалпы құны: ": ["Общая стоимость: ", "Total cost: "], "Белгіленген мәселе жоқ. Бұл шарттың заңдылығын растамайды.": ["Проблемы не отмечены. Это не подтверждает законность договора.", "No issues selected. This does not confirm the contract is legal."], "Белгіленген мәселе жоқ.": ["Проблемы не отмечены.", "No issues selected."], "Туристік компанияның атауы мен деректері": ["Название и реквизиты туркомпании", "Travel company name and details"], "Шарттағы атау, мекенжай және байланыс деректері компанияның нақты мәліметтерімен сәйкес келе ме?": ["Совпадают ли название, адрес и контакты в договоре с данными компании?", "Do the name, address and contact details match the company’s actual information?"], "Лицензия және қызметті жүзеге асыру құқығы": ["Лицензия и право вести деятельность", "Licence and authorisation"], "Компанияның қызмет құқығы бар екенін растайтын құжаттарды сұраңыз және ресми дереккөзден тексеріңіз.": ["Запросите документы, подтверждающие право компании работать, и проверьте их в официальных источниках.", "Request documents confirming the company’s authorisation and verify them using official sources."], "Саяхаттың басталу және аяқталу күндері": ["Даты начала и окончания поездки", "Trip start and end dates"], "Шығу, келу күндері мен уақыты шартта нақты жазылған ба?": ["Указаны ли точные даты и время отправления и прибытия?", "Are the departure and arrival dates and times clearly stated?"], "Туристік бағыт және баратын ел": ["Маршрут и страна назначения", "Itinerary and destination"], "Ел, қала және маршрут нақты көрсетілген бе?": ["Указаны ли страна, город и маршрут?", "Are the country, city and itinerary specified?"], "Қонақүй және орналастыру шарттары": ["Отель и условия проживания", "Hotel and accommodation"], "Қонақүй атауы, нөмір түрі, тамақтану түрі мен жату мерзімі жазылған ба?": ["Указаны ли отель, тип номера, питание и срок проживания?", "Are the hotel, room type, meals and length of stay specified?"], "Көлік және тасымалдау шарттары": ["Транспорт и перевозка", "Transport and transfers"], "Рейс, жөнелу уақыты, трансфер және багаж шарттары көрсетілген бе?": ["Указаны ли рейс, время отправления, трансфер и условия провоза багажа?", "Are flight, departure time, transfer and baggage conditions specified?"], "Турдың толық құны": ["Полная стоимость тура", "Full tour price"], "Нақты баға, валюта және төлем мерзімдері жазылған ба?": ["Указаны ли точная цена, валюта и сроки оплаты?", "Are the exact price, currency and payment deadlines stated?"], "Қосымша төлемдер": ["Дополнительные платежи", "Additional charges"], "Баға құрамына қандай қызметтер кіретіні және кірмейтіні анық па?": ["Понятно ли, какие услуги включены в цену, а какие нет?", "Is it clear which services are included and excluded?"], "Сақтандыру шарттары": ["Условия страхования", "Insurance terms"], "Сақтандыру түрі, сома және қамтылатын жағдайлар қарастырылған ба?": ["Указаны ли тип страховки, сумма и страховые случаи?", "Are the insurance type, amount and covered events specified?"], "Шартты бұзу және ақшаны қайтару талаптары": ["Расторжение договора и возврат средств", "Cancellation and refund terms"], "Бас тарту шарттары, мерзімдері және қайтарылатын сома жазылған ба?": ["Указаны ли условия отказа, сроки и сумма возврата?", "Are cancellation conditions, deadlines and refund amounts stated?"], "Тараптардың құқықтары мен міндеттері": ["Права и обязанности сторон", "Parties’ rights and obligations"], "Әр тараптың міндеттері түсінікті және теңгерімді ме?": ["Понятны и сбалансированы ли обязанности сторон?", "Are each party’s obligations clear and balanced?"], "Дауларды шешу және шағым беру тәртібі": ["Порядок разрешения споров и жалоб", "Dispute and complaint procedure"], "Шағымды қайда және қалай беруге болатыны көрсетілген бе?": ["Указано ли, куда и как подавать жалобу?", "Does it explain where and how to file a complaint?"], "Туристік шарт міндетті түрде жазбаша бола ма?": ["Обязательно ли заключать туристический договор письменно?", "Must a travel contract be in writing?"], "«Қазақстан Республикасындағы туристік қызмет туралы» Заңның 17-бабы бойынша, гидпен және экскурсия жүргізушімен жасалатын шарттарды қоспағанда, туристік қызмет көрсету шарты жазбаша жасалады.": ["По статье 17 Закона РК «О туристской деятельности» договор на туристические услуги заключается письменно, кроме договоров с гидами и экскурсоводами.", "Under Article 17 of Kazakhstan’s Tourism Law, travel service contracts must be in writing, except contracts with guides and tour guides."], "Қол қоймас бұрын не тексеру керек?": ["Что проверить перед подписанием?", "What should I check before signing?"], "Туроператордың атауын, маршрут пен күндерді, қонақүй мен тасымалдауды, баға құрамын, сақтандыруды, бас тарту және шағым беру шарттарын тексеріңіз.": ["Проверьте туроператора, маршрут, даты, отель, транспорт, цену, страховку, отмену и порядок подачи жалоб.", "Check the operator, itinerary, dates, hotel, transport, price, insurance, cancellation and complaint terms."], "Туроператор мен турагенттің айырмашылығы қандай?": ["Чем отличается туроператор от турагента?", "What is the difference between a tour operator and a travel agent?"], "Туроператор туристік өнімді қалыптастырады, ал турагент оны агенттік шарт негізінде ұсынады және өткізеді. Қараңыз: туристік қызмет туралы Заңның 1 және 15-1-баптары.": ["Туроператор формирует туристический продукт, а турагент предлагает и продаёт его на основании агентского договора. См. статьи 1 и 15-1 Закона о туристской деятельности.", "A tour operator creates the travel product, while a travel agent markets and sells it under an agency agreement. See Articles 1 and 15-1 of the Tourism Law."], "Турдан бас тартсам, барлық ақша қайтарыла ма?": ["Вернут ли всю сумму при отмене тура?", "Will I receive a full refund if I cancel?"], "Әрдайым емес. Жауап шарт талаптарына, бас тарту себебіне және заңға байланысты. Заңның 17-бабының 9–11-тармақтарын қараңыз; қайтару сомасын автоматты түрде болжауға болмайды.": ["Не всегда. Это зависит от договора, причины отмены и закона. См. пункты 9–11 статьи 17; сумму возврата нельзя определить автоматически.", "Not always. It depends on the contract, cancellation reason and law. See Article 17, paragraphs 9–11; refunds cannot be predicted automatically."], "Шартта компания барлық жауапкершіліктен босатылса ше?": ["Что, если договор освобождает компанию от ответственности?", "What if the contract excludes all company liability?"], "Мұндай талап тұтынушы құқықтарын шектеуі мүмкін. «Тұтынушылардың құқықтарын қорғау туралы» Заңның 8-1-бабы шарттағы құқық бұзатын талаптарға тыйым салады.": ["Такое условие может ограничивать права потребителя. Статья 8-1 Закона о защите прав потребителей запрещает ущемляющие права условия договора.", "Such a clause may restrict consumer rights. Article 8-1 of the Consumer Protection Law prohibits unfair terms infringing those rights."], "Құқықтарым бұзылса не істеймін?": ["Что делать при нарушении моих прав?", "What should I do if my rights are violated?"], "Дәлелдерді сақтап, компанияға жазбаша шағым беріңіз. Жағдай шешілмесе, құзыретті органға немесе сотқа жүгіну жолын қарастырыңыз. Нақты рәсім мен мерзімдерді қолданыстағы заңнан тексеріңіз.": ["Сохраните доказательства и направьте компании письменную претензию. Если вопрос не решён, рассмотрите обращение в уполномоченный орган или суд. Уточните порядок и сроки по действующему закону.", "Keep evidence and send a written complaint to the company. If unresolved, consider contacting the competent authority or a court. Check current procedures and deadlines."], "Қосымша төлемдер түсініксіз": ["Непонятные дополнительные платежи", "Unclear extra charges"], "Қызметтердің толық бағасын, валюта мен қосымша төлемдердің жазбаша тізімін сұраңыз.": ["Запросите полную стоимость услуг, валюту и письменный перечень доплат.", "Request the full price, currency and a written list of additional charges."], "Ақшаны қайтару шарттары анық емес": ["Неясные условия возврата", "Unclear refund terms"], "Бас тарту, мерзімдер және қайтарылатын соманы шарттан тауып, түсіндірмені жазбаша алыңыз.": ["Уточните в договоре отмену, сроки и возврат, запросите письменное разъяснение.", "Review cancellation, deadlines and refund amounts, and request written clarification."], "Қонақүй немесе сапар бағдарламасы нақты көрсетілмеген": ["Отель или программа поездки не указаны", "Hotel or itinerary not specified"], "Қонақүй, орналастыру, маршрут және күндерді шартта нақтылауды сұраңыз.": ["Попросите уточнить отель, размещение, маршрут и даты в договоре.", "Ask to specify the hotel, accommodation, itinerary and dates in the contract."], "Компания деректері сәйкес келмейді": ["Реквизиты компании не совпадают", "Company details do not match"], "Компания атауы мен тіркеу деректерін ресми дереккөздер арқылы қайта салыстырыңыз.": ["Сверьте название и регистрационные данные компании с официальными источниками.", "Cross-check the company name and registration data against official sources."], "Сақтандыру туралы ақпарат жеткіліксіз": ["Недостаточно сведений о страховке", "Insufficient insurance information"], "Сақтандырудың қамтуы, мерзімі, шектеулері мен байланыс деректерін нақтылаңыз.": ["Уточните покрытие, сроки, исключения и контакты страховщика.", "Clarify coverage, duration, exclusions and insurer contact details."], "Шағым беру тәртібі көрсетілмеген": ["Не указан порядок подачи жалоб", "Complaint procedure not stated"], "Шағым жіберу мекенжайы мен байланыс арналарын жазбаша нақтылаңыз.": ["Письменно уточните адрес и способы подачи претензий.", "Request written details of the complaint address and contact channels."], "НАЗАР АУДАРУДЫ ҚАЖЕТ ЕТЕТІН МӘСЕЛЕЛЕР:": ["ВОПРОСЫ, ТРЕБУЮЩИЕ ВНИМАНИЯ:", "ISSUES REQUIRING ATTENTION:"], "ЧЕК-ЛИСТ:": ["ЧЕК-ЛИСТ:", "CHECKLIST:"], "Күні: ": ["Дата: ", "Date: "], "Тексерілген тармақтар: ": ["Проверено пунктов: ", "Items checked: "], "Ескерту: Бұл есеп тек ақпараттық мақсатта жасалған. Белгілер шарттың заңдылығын немесе қауіпсіздігін растамайды. Заңның қолданыстағы редакциясын adilet.zan.kz сайтынан тексеріңіз.": ["Примечание: отчёт носит информационный характер. Отметки не подтверждают законность или безопасность договора. Проверяйте действующую редакцию закона на adilet.zan.kz.", "Note: this report is informational only. Checked items do not prove the contract is legal or safe. Verify current law at adilet.zan.kz."], "TOURCHECK KZ — ШАРТТЫ ТЕКСЕРУ ЕСЕБІ": ["TOURCHECK KZ — ОТЧЁТ О ПРОВЕРКЕ ДОГОВОРА", "TOURCHECK KZ — CONTRACT REVIEW REPORT"]};
+Object.assign(translations, {"Алғашқы қадамдар":["Первые шаги","First steps"],"Сіз туристік агенттікке келдіңіз. Енді не істеу керек?": ["Вы пришли в туристическое агентство. Что делать дальше?", "You have arrived at a travel agency. What should you do next?"], "Сіз демалысқа жолдама алғыңыз келеді. Ақша төлемей және шартқа қол қоймай тұрып, осы үш қадамды орындаңыз.": ["Вы хотите купить тур. Прежде чем платить и подписывать договор, пройдите эти три шага.", "You want to book a trip. Before paying or signing a contract, follow these three steps."], "Турагенттік туралы ақпаратты тексеріңіз": ["Проверьте информацию о турагентстве", "Check the travel agency"], "Компанияның толық атауын, байланыс деректерін және қызметті жүзеге асыруға құқығын сұраңыз. Ұсынылған мәліметтерді ресми дереккөздермен салыстырыңыз.": ["Уточните полное название компании, контакты и право вести деятельность. Сверьте сведения с официальными источниками.", "Ask for the company’s full name, contact details and authorization to operate. Verify the details using official sources."], "Турдың барлық шарттарын нақтылаңыз": ["Уточните все условия тура", "Clarify all tour terms"], "Бағасын, күндерін, қонақүйді, ұшуды, сақтандыруды, қосымша төлемдерді және турдан бас тарту талаптарын жазбаша түрде біліңіз.": ["Попросите письменно указать цену, даты, отель, перелёт, страховку, доплаты и условия отмены.", "Get the price, dates, hotel, flights, insurance, extra charges and cancellation terms in writing."], "Шартты оқып, содан кейін ғана қол қойыңыз": ["Прочитайте договор и только потом подписывайте", "Read the contract before signing"], "Ауызша уәделердің шартта көрсетілгеніне көз жеткізіңіз. Түсініксіз талаптарды нақтылаңыз, төлем құжаттары мен шарттың көшірмесін сақтаңыз.": ["Убедитесь, что устные обещания отражены в договоре. Уточните непонятные пункты, сохраните договор и подтверждения оплаты.", "Make sure verbal promises appear in the contract. Clarify unclear terms and keep your contract and payment receipts."], "12 тармақ бойынша шартты тексеру": ["Проверить договор по 12 пунктам", "Check the 12-point checklist"], "Заңдағы құқықтарымды көру": ["Посмотреть мои права по закону", "View my legal rights"]});
+let language='kk';try{language=localStorage.getItem('tourcheck-language')||'kk'}catch(e){}if(!['kk','ru','en'].includes(language))language='kk';
+const originals=new WeakMap();
+function translateString(source){
+ if(language==='kk')return source;
+ const index=language==='ru'?0:1;
+ if(translations[source])return translations[source][index];
+ // preserve whitespace around exact text nodes
+ const trimmed=source.trim();if(translations[trimmed])return source.replace(trimmed,translations[trimmed][index]);
+ // report lines, numeric values and dynamic strings
+ let result=source;
+ for(const [key, pair] of Object.entries(translations).sort((a,b)=>b[0].length-a[0].length)){
+  if(key.length>8 && result.includes(key))result=result.split(key).join(pair[index]);
+ }
+ result=result.replace(/Назар аударуды қажет ететін мәселелер: (\d+)/g,(_,n)=>(index===0?'Вопросов, требующих внимания: ':'Issues requiring attention: ')+n);
+ return result;
+}
+let busy=false;
+function applyTree(root){if(busy)return;busy=true;try{
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ if(root.nodeType===Node.TEXT_NODE)nodes.unshift(root);
+ for(const node of nodes){if(!node.parentElement||node.parentElement.closest('script,style,.lang-switch'))continue;
+  if(!originals.has(node))originals.set(node,node.nodeValue);
+  const original=originals.get(node), target=translateString(original);
+  if(node.nodeValue!==target)node.nodeValue=target;
+ }
+ document.documentElement.lang=language;
+ document.querySelectorAll('.lang-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===language)));
+}finally{busy=false}}
+const observer=new MutationObserver(records=>{if(busy)return;for(const record of records){
+ if(record.type==='characterData'){const node=record.target;const orig=originals.get(node);if(orig===undefined || (node.nodeValue!==translateString(orig)&&node.nodeValue!==orig))originals.set(node,node.nodeValue);applyTree(node);}
+ else for(const node of record.addedNodes)if(node.nodeType===1||node.nodeType===3)applyTree(node);
+}});
+observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+document.querySelectorAll('.lang-switch button').forEach(button=>button.addEventListener('click',()=>{
+ language=button.dataset.lang;try{localStorage.setItem('tourcheck-language',language)}catch(e){}
+ applyTree(document.body);
+ // Refresh report so downloaded text uses the selected language too.
+ if(typeof updateReport==='function')updateReport();
+}));
+// Intercept report generation for the downloaded text file as well.
+if(typeof reportText==='function'){
+ const originalReport=reportText;
+ reportText=function(){return translateString(originalReport());};
+}
+applyTree(document.body);
+})();
+</script>
+<script>
+/* Article finder: no scraping; opens official legal document with article anchor. */
+(function(){
+const form=document.getElementById('lawSearchForm'),input=document.getElementById('lawArticle'),doc=document.getElementById('lawDocument'),msg=document.getElementById('lawSearchMessage');
+const laws={tourism:'Z010000211_',consumer:'Z100000274_'};
+const copy={
+kk:{title:'🔎 Заң баптарын іздеу',desc:'Бап нөмірін енгізіңіз. Ресми «Әділет» порталында тиісті заң ашылады.',document:'Заңды таңдаңыз',article:'Бап нөмірі',button:'Іздеу ↗',placeholder:'Мысалы: 15 бап, 17-бап, 8-1',options:['Туристік қызмет туралы заң','Тұтынушылардың құқықтарын қорғау туралы заң'],note:'Ескерту: бапқа тікелей өту «Әділет» сайтының сілтеме жүйесіне байланысты.',error:'Дұрыс бап нөмірін енгізіңіз (мысалы: 15, 17-бап немесе 8-1).',success:'«Әділет» сайтында бап ашылады. Егер бірден өтпесе, құжаттан бап нөмірін іздеңіз.'},
+ru:{title:'🔎 Поиск статей закона',desc:'Введите номер статьи — откроется соответствующий закон на официальном портале «Әділет».',document:'Выберите закон',article:'Номер статьи',button:'Найти ↗',placeholder:'Например: статья 15, 17-бап, 8-1',options:['Закон о туристской деятельности','Закон о защите прав потребителей'],note:'Примечание: переход прямо к статье зависит от системы ссылок портала «Әділет».',error:'Введите корректный номер статьи (например: 15, статья 17 или 8-1).',success:'Открывается статья на «Әділет». Если переход не сработал, найдите номер статьи в документе.'},
+en:{title:'🔎 Find a law article',desc:'Enter an article number to open the relevant law on the official Adilet portal.',document:'Choose a law',article:'Article number',button:'Search ↗',placeholder:'Example: article 15, 17-бап, 8-1',options:['Law on Tourism Activities','Consumer Protection Law'],note:'Note: direct navigation depends on the Adilet website’s anchor links.',error:'Enter a valid article number (e.g. 15, article 17, or 8-1).',success:'Opening the article on Adilet. If it does not jump to the article, search its number in the document.'}};
+function lang(){return document.querySelector('.lang-switch button[aria-pressed="true"]')?.dataset.lang||'kk'}
+function render(){const t=copy[lang()]||copy.kk;for(const [id,key] of [['lawSearchTitle','title'],['lawSearchDesc','desc'],['lawDocumentLabel','document'],['lawArticleLabel','article'],['lawSearchButton','button']])document.getElementById(id).textContent=t[key];input.placeholder=t.placeholder;doc.options[0].text=t.options[0];doc.options[1].text=t.options[1];if(!msg.dataset.status)msg.textContent=t.note;else msg.textContent=t[msg.dataset.status]}
+form.addEventListener('submit',e=>{e.preventDefault();const match=input.value.trim().match(/(?:^|[^0-9])([0-9]{1,3}(?:\s*[-–]\s*[0-9]{1,2})?)(?![0-9])/);if(!match){msg.dataset.status='error';render();return;}const article=match[1].replace(/\s/g,'').replace('–','-');const id=laws[doc.value];const locale=lang()==='ru'?'rus':'kaz';const url='https://adilet.zan.kz/'+locale+'/docs/'+id+'#z'+article;msg.dataset.status='success';render();const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';document.body.appendChild(link);link.click();link.remove();});
+document.querySelectorAll('.law-search-samples button').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.article;input.focus();}));
+document.querySelectorAll('.lang-switch button').forEach(b=>b.addEventListener('click',()=>{msg.dataset.status='';setTimeout(render,0)}));render();
+})();
+</script>
+<script>
+(function(){
+ const root=document.documentElement;
+ const buttons=[...document.querySelectorAll('.palette-dot')];
+ let palette='wine';try{palette=localStorage.getItem('tourcheck-palette')||'wine'}catch(e){}
+ function apply(value){if(!['wine','ocean','forest','violet'].includes(value))value='wine';root.dataset.palette=value;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.palette===value)));try{localStorage.setItem('tourcheck-palette',value)}catch(e){}}
+ buttons.forEach(b=>b.addEventListener('click',()=>apply(b.dataset.palette)));
+ apply(palette);
+})();
+</script>
+<script>
+/* Animate elements as they enter view, without hiding content in iPhone previews. */
+(function(){
+ if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const selector='.journey-step, .card, .item, .panel, .law-search-panel';
+ const seen=new WeakSet();
+ function animate(el){if(seen.has(el))return;seen.add(el);el.classList.add('tc-animate');}
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){animate(entry.target);observer.unobserve(entry.target);}})},{threshold:.08,rootMargin:'0px 0px -25px 0px'});
+  function register(){document.querySelectorAll(selector).forEach(el=>{if(!seen.has(el)&&!el.dataset.tcObserved){el.dataset.tcObserved='1';observer.observe(el)}})}
+  register();
+  const checklist=document.getElementById('checklist');if(checklist&&'MutationObserver' in window)new MutationObserver(register).observe(checklist,{childList:true});
+ }else document.querySelectorAll(selector).forEach(animate);
+})();
+</script>
+<script id="tc-motion-js">
+(function(){
+ if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ var header=document.querySelector('header');
+ function onScroll(){if(header)header.classList.toggle('tc-scrolled',(window.scrollY||0)>12)}
+ window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+ if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('tc-h2-go');io.unobserve(e.target)}})},{threshold:.6});
+  document.querySelectorAll('section:not(.hero) h2').forEach(function(h){
+   if(h.getBoundingClientRect().top>window.innerHeight*.9){h.classList.add('tc-h2-pre');io.observe(h)}
+  });
+ }
+})();
+</script>
+
+<script id="tc-sections-js">window.TC_QUIZ={"q": [{"q": "Турагент: «Бәрін ауызша келістік, шартқа жазудың қажеті жоқ» дейді. Не істейсіз?", "o": ["Сенемін де, қол қоямын", "Келісілген талаптарды шартқа жазуды сұраймын", "Тек мессенджердегі хабарламаға сенемін"], "a": 1, "e": "Ауызша уәделер шартта көрсетілуі тиіс — бұл тексерудің басты ережесі."}, {"q": "Туристік қызмет көрсету шарты қандай түрде жасалады?", "o": ["Тек ауызша", "Жазбаша (гид және экскурсия жүргізушімен жасалатын шарттарды қоспағанда)", "Кез келген түрде, форманың маңызы жоқ"], "a": 1, "e": "Заңның 17-бабы бойынша шарт жазбаша жасалады (гид және экскурсия жүргізушімен жасалатын шарттардан басқасы)."}, {"q": "Тур бағасы туралы қайсысы дұрыс?", "o": ["Баға туралы ауызша келісім жеткілікті", "Бағаға не кіретіні мен не кірмейтіні жазбаша нақты көрсетілуі керек", "Қосымша төлемдер туралы сапар кезінде ғана сұраған дұрыс"], "a": 1, "e": "Қосымша төлемдер мен баға құрамы алдын ала нақтыланбаса, түпкілікті құн күтпеген жерден өсуі мүмкін."}, {"q": "Чек-листтегі барлық 12 тармақ белгіленді. Бұл нені білдіреді?", "o": ["Шарт міндетті түрде заңды", "Тармақтарды қарап шықтыңыз, бірақ бұл заңдылыққа кепілдік емес", "Енді ешқандай тексеру қажет емес"], "a": 1, "e": "Пайыз тек белгіленген тармақтар санын көрсетеді. Күмәнді жағдайда нақты шартты жеке қарау қажет."}, {"q": "Төлем құжаттары мен шарттың көшірмесін не істейсіз?", "o": ["Сақтаймын — дау туындаса, олар дәлел болады", "Сапардан кейін тастаймын", "Тек турагенттікте қалсын"], "a": 0, "e": "Төлем құжаттары мен шарттың көшірмесі дау туындаған жағдайда құқықтарыңызды растауға көмектеседі."}], "ok": "Дұрыс!", "bad": "Қате.", "next": "Келесі сұрақ →", "fin": "Нәтижені көрсету", "msgs": ["Тамаша! Сіз шартты тексеру ережелерін жақсы білесіз.", "Жақсы нәтиже. Кейбір тақырыптарды қайталап шығыңыз.", "Тақырыпты қайта қарап шығыңыз: чек-листтен бастаңыз."]};
+(function(){
+ /* Red flags: accordion */
+ document.querySelectorAll('.flag>button').forEach(function(b){
+  b.addEventListener('click',function(){
+   var f=b.parentElement,open=!f.classList.contains('open');
+   f.classList.toggle('open',open);b.setAttribute('aria-expanded',String(open));
+  });
+ });
+
+ /* Quiz */
+ var D=window.TC_QUIZ,box=document.getElementById('quizBox');if(!D||!box)return;
+ var $=function(i){return document.getElementById(i)},i=0,score=0,locked=false;
+ var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function show(){
+  locked=false;var q=D.q[i];
+  $('qNum').textContent=i+1;$('qLive').textContent=score;
+  $('qBar').style.width=(i/D.q.length*100)+'%';
+  $('qText').textContent=q.q;$('qFb').textContent='';$('qNext').hidden=true;
+  var o=$('qOpts');o.textContent='';
+  q.o.forEach(function(t,k){
+   var b=document.createElement('button');b.type='button';b.className='qopt';
+   var key=document.createElement('span');key.className='k';key.textContent='ABC'[k];key.setAttribute('aria-hidden','true');
+   var tx=document.createElement('span');tx.textContent=t;
+   b.append(key,tx);b.addEventListener('click',function(){pick(k)});o.append(b);
+  });
+ }
+ function pick(k){
+  if(locked)return;locked=true;
+  var q=D.q[i],btns=[].slice.call(document.querySelectorAll('#qOpts .qopt')),good=k===q.a;
+  btns.forEach(function(b,j){b.disabled=true;if(j===q.a)b.classList.add('right');else if(j===k)b.classList.add('wrong');else b.classList.add('dim')});
+  if(good){score++;$('qLive').textContent=score}
+  var fb=$('qFb');fb.textContent='';
+  var m=document.createElement('div');m.className='msg '+(good?'ok':'no');
+  var h=document.createElement('b');h.textContent=good?D.ok:D.bad;var p=document.createElement('span');p.textContent=q.e;
+  m.append(h,p);fb.append(m);
+  var n=$('qNext');n.textContent=(i===D.q.length-1)?D.fin:D.next;n.hidden=false;n.focus({preventScroll:true});
+  $('qBar').style.width=((i+1)/D.q.length*100)+'%';
+ }
+ $('qNext').addEventListener('click',function(){
+  if(i<D.q.length-1){i++;show()}else finish();
+ });
+ function finish(){
+  $('qStage').hidden=true;$('qRes').hidden=false;
+  var f=$('qFinal'),n=0;f.textContent='0';
+  var t=setInterval(function(){n++;f.textContent=n;if(n>=score)clearInterval(t)},score?260:0);
+  if(!score)f.textContent='0';
+  $('qMsg').textContent=score>=5?D.msgs[0]:score>=3?D.msgs[1]:D.msgs[2];
+  if(score>=4&&!reduce){
+   var c=$('confetti');c.textContent='';var cols=['#bd9859','#681d32','#e2b878','#d49aab','#2e7d4f'];
+   for(var k=0;k<36;k++){var e=document.createElement('i');e.style.left=(Math.random()*100)+'%';e.style.background=cols[k%cols.length];e.style.animationDelay=(Math.random()*.9)+'s';e.style.animationDuration=(2.2+Math.random()*1.6)+'s';c.append(e)}
+  }
+ }
+ $('qAgain').addEventListener('click',function(){
+  i=0;score=0;$('qRes').hidden=true;$('qStage').hidden=false;$('confetti').textContent='';show();
+ });
+ show();
+})();
+</script>
+<script id="tourcheck-quest-script">(function(){
+const DATA={"kk": {"head": "✈️ Айгерімнің саяхаты — TourCheck Quest", "intro": "Интерактивті құқықтық оқиға: бес шешім қабылдап, саяхатты қауіпсіз сақтап қал!", "level": "ДЕҢГЕЙ", "next": "Келесі деңгей →", "finish": "Финалды көру →", "right": "Дұрыс шешім! +20 XP", "wrong": "Қауіпті шешім · +0 XP", "again": "Қайта ойнау", "check": "12 тармақты тексеру", "disclaimer": "Оқиға ойдан шығарылған. Ойын құқықтық ақпарат береді, бірақ жеке заңгерлік кеңес емес.", "endGood": "Саналы турист! 🏆", "endMid": "Сен дұрыс жолдасың! 🌟", "endBad": "Келесі сапарда абай бол! 🚩", "endGoodText": "Сен маңызды қауіптерді дер кезінде байқадың. Бірақ кез келген турды ресми деректермен және шартпен тексеру керек.", "endMidText": "Бірнеше қауіпті белгі назардан тыс қалды. Чек-лист арқылы біліміңді бекіт.", "endBadText": "Айгерімнің оқиғасы — жарнаманы емес, құжатты тексерудің неге маңызды екенін көрсететін сабақ.", "stages": [["📱", "INSTAGRAM · ТУР ІЗДЕУ", "Арзан тур ма, әлде тұзақ па?", "22 жастағы Айгерім достарымен демалғысы келеді. Instagram-да 150 000 теңгеге 5 жұлдызды қонақүй, ұшақ және сақтандыру ұсынылады.", "Менеджер: «Тек бүгін жеңілдік! Соңғы екі орын қалды!»", "Сен Айгерімнің орнында не істер едің?", ["💸 Бірден ақша аударамын", "🔎 Компанияның БСН-ін, мәртебесін және құжаттарын тексеремін", "❤️ Оқырман санына ғана сенемін"], 1, "Жарнама мен оқырман саны сенімділік кепілі емес. Компанияның нақты деректерін, қызметін және төлем алушысын тексер."], ["💬", "WHATSAPP · МЕНЕДЖЕР", "«Шартты оқудың қажеті жоқ»", "Менеджер WhatsApp арқылы шарт жібереді, бірақ «бәрі стандартты» деп асықтырады.", "Менеджер: «Қол қоя салыңыз, кейін бәрін түсіндіремін».", "Не істейсің?", ["✍️ Оқымай қол қоямын", "📄 Қонақүй, күндер, рейс, баға және қайтару шарттарын жазбаша нақтылаймын", "🤝 Тек ауызша уәдеге сенемін"], 1, "Маңызды уәделер шартта анық жазылуы керек. Түсініксіз тармақтарға қол қоюға асықпа."], ["💳", "ТӨЛЕМ · ҚАУІП", "Ақшаны қайда аударамыз?", "Айгерімнен ақшаны белгісіз адамның жеке картасына аудару сұралады.", "Менеджер: «Компанияның шоты уақытша істемей тұр».", "Қандай шешім қабылдайсың?", ["💸 Жеке картаға аударамын", "🧾 Алушы деректерін шартпен салыстырып, ресми төлем құжатын сұраймын", "🙈 Чек қажет емес деп ойлаймын"], 1, "Төлем алушының кім екенін анықта, ресми төлем растауын сақта. Жеке картаға асығыс аудару — елеулі қауіп белгісі."], ["🛫", "ӘУЕЖАЙ · ТОСЫН ЖАҒДАЙ", "Билет жоқ. Менеджер жоғалды.", "Әуежайда Айгерімнің атына билет табылмайды. Қонақүй броні де расталмаған, Instagram парақшасы жойылған.", "Айгерім: «Енді не істеймін?!»", "Алғашқы әрекет қандай?", ["🗑️ Хаттарды өшіремін", "📸 Шартты, хаттарды, чектерді, жарнаманы сақтап, жақын адамыма хабарлаймын", "📱 Тек әлеуметтік желіде шағымданамын"], 1, "Дәлелдерді сақта: шарт, төлем чегі, хат алмасу, жарнама және бронь туралы ақпарат. Қажет болса, жақын адамдарыңнан немесе заңгерден көмек сұра."], ["⚖️", "ҚҰҚЫҚ · ӘРЕКЕТ", "Өз құқығыңды қорға", "Айгерім алаяқтық болуы мүмкін екенін түсінеді. Енді дұрыс жолмен әрекет етуі керек.", "Досы: «Қайда жүгінеміз?»", "Қай жол дұрыс?", ["😔 Ештеңе істемеймін", "🛡️ Полицияға арыз беру мүмкіндігін қарастырып, тұтынушы құқығын қорғау жолдарын және шартты тексеремін", "💬 Тек менеджерге қайта-қайта жазамын"], 1, "Алаяқтық белгілері болса полицияға жүгінуге болады. Тұтынушы құқығын қорғау бойынша шағым жолдарын қарастыр; нақты рәсімдерді ресми порталдардан тексер."]]}, "ru": {"head": "✈️ Путешествие Айгерим — TourCheck Quest", "intro": "Интерактивная юридическая история: пройди пять уровней и научись распознавать риски!", "level": "УРОВЕНЬ", "next": "Следующий уровень →", "finish": "Посмотреть финал →", "right": "Верное решение! +20 XP", "wrong": "Рискованный выбор · +0 XP", "again": "Играть снова", "check": "Проверить 12 пунктов", "disclaimer": "История вымышленная и носит образовательный характер, не заменяя юридическую консультацию.", "endGood": "Осознанный турист! 🏆", "endMid": "Ты на верном пути! 🌟", "endBad": "Будь осторожнее! 🚩", "endGoodText": "Ты вовремя заметила важные риски. Всё равно проверяй реальные документы и данные компании.", "endMidText": "Некоторые опасные признаки остались незамеченными. Закрепи знания по чек-листу.", "endBadText": "История Айгерим показывает, почему важно проверять документы, а не доверять одной рекламе.", "stages": [["📱", "INSTAGRAM · ПОИСК ТУРА", "Дешёвый тур или ловушка?", "22-летняя Айгерим собирается в поездку с друзьями. В Instagram предлагают 5-звёздочный отель, перелёт и страховку за 150 000 тенге.", "Менеджер: «Скидка только сегодня! Осталось два места!»", "Что ты сделаешь?", ["💸 Сразу переведу деньги", "🔎 Проверю БИН, статус и документы компании", "❤️ Поверю числу подписчиков"], 1, "Реклама и подписчики не гарантируют надёжность. Проверь данные компании, её деятельность и получателя платежа."], ["💬", "WHATSAPP · МЕНЕДЖЕР", "«Договор можно не читать»", "Менеджер присылает договор, но торопит с подписью.", "Менеджер: «Подпишите сейчас, потом объясню».", "Твоё решение?", ["✍️ Подпишу не читая", "📄 Уточню письменно отель, даты, рейс, цену и возврат", "🤝 Поверю устным обещаниям"], 1, "Важные обещания должны быть понятны из договора. Не подписывай непонятные условия."], ["💳", "ОПЛАТА · РИСК", "Кому переводить деньги?", "Айгерим предлагают перевести деньги на личную карту незнакомого человека.", "Менеджер: «Счёт компании временно не работает».", "Что выберешь?", ["💸 Переведу на личную карту", "🧾 Сверю получателя с договором и попрошу платёжный документ", "🙈 Чек мне не нужен"], 1, "Установи личность получателя платежа и сохрани подтверждение. Срочный перевод на личную карту — тревожный признак."], ["🛫", "АЭРОПОРТ · ПРОБЛЕМА", "Билета нет. Менеджер исчез.", "В аэропорту не находят билет на имя Айгерим. Бронь отеля не подтверждена, страница в Instagram удалена.", "Айгерим: «Что теперь делать?!»", "Первое действие?", ["🗑️ Удалить переписку", "📸 Сохранить договор, сообщения и чеки, связаться с близкими", "📱 Только написать жалобу в соцсетях"], 1, "Сохрани договор, чек, переписку, рекламу и сведения о бронировании. При необходимости обратись за помощью к близким или юристу."], ["⚖️", "ПРАВА · ДЕЙСТВИЯ", "Защити свои права", "Айгерим подозревает обман. Нужно выбрать дальнейшие действия.", "Подруга: «Куда обращаться?»", "Что правильнее?", ["😔 Ничего не делать", "🛡️ Рассмотреть заявление в полицию и способы защиты прав потребителя", "💬 Только продолжать писать менеджеру"], 1, "При признаках мошенничества можно обратиться в полицию. Уточни порядок обращения и защиты прав потребителя через официальные ресурсы."]]}, "en": {"head": "✈️ Aigerim’s Journey — TourCheck Quest", "intro": "An interactive legal story: make five decisions and learn to spot travel risks!", "level": "LEVEL", "next": "Next level →", "finish": "See your ending →", "right": "Smart choice! +20 XP", "wrong": "Risky choice · +0 XP", "again": "Play again", "check": "Check 12 items", "disclaimer": "This is a fictional educational story, not legal advice.", "endGood": "Travel smart! 🏆", "endMid": "You’re on the right track! 🌟", "endBad": "Be more careful next time! 🚩", "endGoodText": "You spotted the key risks, but always verify actual contracts and company records.", "endMidText": "Some warning signs were missed. Review the checklist.", "endBadText": "Aigerim’s story shows why you should check documents rather than trust an advertisement.", "stages": [["📱", "INSTAGRAM · TOUR SEARCH", "Bargain or trap?", "22-year-old Aigerim plans a trip with friends. Instagram advertises a five-star hotel, flights and insurance for 150,000 tenge.", "Agent: “Discount today only! Just two spots left!”", "What would you do?", ["💸 Pay immediately", "🔎 Check the company ID, status and documents", "❤️ Trust its follower count"], 1, "Followers and ads are not proof of reliability. Verify the company and payment recipient."], ["💬", "WHATSAPP · AGENT", "“No need to read the contract”", "The agent sends a contract and pressures Aigerim to sign quickly.", "Agent: “Sign now, I will explain later.”", "Your choice?", ["✍️ Sign without reading", "📄 Confirm hotel, dates, flights, price and refunds in writing", "🤝 Trust verbal promises"], 1, "Important promises should be clear in the contract. Never rush into unclear terms."], ["💳", "PAYMENT · RISK", "Who receives the money?", "Aigerim is told to transfer money to a stranger’s personal bank card.", "Agent: “Our company account is temporarily unavailable.”", "What do you choose?", ["💸 Transfer to the card", "🧾 Match recipient details with the contract and request a receipt", "🙈 No receipt needed"], 1, "Verify the payee and keep payment proof. Urgent transfers to personal cards are a warning sign."], ["🛫", "AIRPORT · SURPRISE", "No ticket. Agent vanished.", "At the airport there is no ticket in Aigerim’s name. The hotel booking is unconfirmed and the Instagram page has disappeared.", "Aigerim: “What do I do now?!”", "Your first step?", ["🗑️ Delete the messages", "📸 Preserve the contract, chats and receipts; contact someone you trust", "📱 Only complain on social media"], 1, "Preserve documents, receipts, chats, ads and booking details. Involve someone you trust or a lawyer if needed."], ["⚖️", "RIGHTS · ACTION", "Protect your rights", "Aigerim suspects fraud and must decide what to do next.", "Friend: “Where can we go?”", "Which is best?", ["😔 Do nothing", "🛡️ Consider reporting suspected fraud and consumer-protection options", "💬 Only keep messaging the agent"], 1, "If fraud is suspected, consider contacting police. Check official procedures for complaints and consumer rights."]]}};let lang='kk',index=0,xp=0,locked=false;const el=id=>document.getElementById(id);const labels=['A','B','C'];
+function activeLang(){var l=document.documentElement.lang;return DATA[l]?l:'kk'}
+function render(){lang=activeLang();const d=DATA[lang],q=d.stages[index];el('questHeading').textContent=d.head;el('questIntro').textContent=d.intro;el('questDisclaimer').textContent=d.disclaimer;el('questLevel').textContent=(index+1)+'-'+d.level;el('questCount').textContent=(index+1)+' / 5';el('questXp').textContent='⭐ '+xp+' XP';el('questProgress').style.width=(index/5*100)+'%';el('questIcon').textContent=q[0];el('questSceneLabel').textContent=q[1];el('questTitle').textContent=q[2];el('questStory').textContent=q[3];el('questChat').textContent=q[4];el('questQuestion').textContent=q[5];el('questFeedback').hidden=true;el('questNext').hidden=true;el('questEnd').hidden=true;el('questOptions').hidden=false;locked=false;const opts=el('questOptions');opts.replaceChildren();q[6].forEach((v,k)=>{const b=document.createElement('button');b.type='button';b.className='quest-option';b.textContent=labels[k]+'.  '+v;b.onclick=()=>choose(k);opts.append(b)});}
+function choose(k){if(locked)return;locked=true;const d=DATA[lang],q=d.stages[index],good=k===q[7];if(good)xp+=20;el('questXp').textContent='⭐ '+xp+' XP';[...el('questOptions').children].forEach((b,i)=>{b.disabled=true;if(i===k)b.classList.add('chosen');if(i===q[7])b.classList.add('correct')});const fb=el('questFeedback');fb.replaceChildren();const strong=document.createElement('strong');strong.textContent=good?d.right:d.wrong;const span=document.createElement('span');span.textContent=q[8];fb.append(strong,span);fb.hidden=false;el('questNext').hidden=false;el('questNext').textContent=index===4?d.finish:d.next;el('questProgress').style.width=((index+1)/5*100)+'%';}
+function end(){const d=DATA[lang],good=xp>=80,mid=xp>=40;el('questOptions').hidden=true;el('questFeedback').hidden=true;el('questNext').hidden=true;el('questQuestion').textContent='';el('questChat').textContent='';el('questTitle').textContent=good?d.endGood:mid?d.endMid:d.endBad;el('questStory').textContent=good?d.endGoodText:mid?d.endMidText:d.endBadText;el('questIcon').textContent=good?'🏆':mid?'🌟':'🚩';el('questSceneLabel').textContent='TOURCHECK QUEST · FINAL';const end=el('questEnd');end.replaceChildren();const score=document.createElement('div');score.className='quest-end-score';score.textContent=xp+' / 100 XP';const actions=document.createElement('div');actions.className='quest-end-actions';const again=document.createElement('button');again.textContent=d.again;again.onclick=()=>{index=0;xp=0;render()};const link=document.createElement('a');link.href='#check';link.textContent=d.check;actions.append(again,link);end.append(score,actions);end.hidden=false;}
+el('questNext').onclick=()=>{if(index<4){index++;render()}else end()};document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{index=0;xp=0;render()},0)));render();})();</script></body>
+</html>
